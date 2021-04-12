@@ -8,16 +8,18 @@ const host = process.env.HOST || '127.0.0.1'; // if not defined, localhost
 
 app.use(cors()); //enable ALL CORS requests (client requests from other domain)
 app.use(express.json()); //enable parsing JSON body data
+
 // root route -- /api/
 app.get('/', function (req, res) {
     res.status(200).json({ message: 'home -- PROJETO II api' });
 });
 
-// routing middleware for resource TUTORIALS
+// routing middleware for resource ACTIVITIES
 app.use('/activities', require('./routes/activities.routes.js'))
 
 // handle invalid routes
 app.get('*', function (req, res) {
     res.status(404).json({ message: 'WHAT???' });
 })
+
 app.listen(port, host, () => console.log(`App listening at http://${host}:${port}/`));
