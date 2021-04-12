@@ -1,8 +1,8 @@
 const express = require('express');
 let router = express.Router();
-const tutorialController = require('../controllers/activities.controller');
+const activityController = require('../controllers/activities.controller.js');
 
-// middleware for all routes related with tutorials
+// middleware for all routes related with activities
 router.use((req, res, next) => {
     const start = Date.now();
     res.on("finish", () => { //finish event is emitted once the response is sent to the client
@@ -13,10 +13,10 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-//.get(tutorialController.findAll)
-//.post(tutorialController.create);
+    .get(activityController.findAll)
+//.post(activityController.create);
 
-//send a predefined error message for invalid routes on TUTORIALS
+//send a predefined error message for invalid routes on ACTIVITIES
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'ACTIVITIES: what???' });
 })
