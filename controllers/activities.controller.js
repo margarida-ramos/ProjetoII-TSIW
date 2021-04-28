@@ -1,5 +1,5 @@
 const db = require("../models/index.js");
-const Tutorial = db.activity;
+const Activity = db.activity;
 
 //necessary for LIKE operator
 const { Op } = require('sequelize');
@@ -7,7 +7,7 @@ const { Op } = require('sequelize');
 // calculates limit and offset parameters for Sequelize Model method findAndCountAll(), 
 // from API request query parameters: page and size
 const getPagination = (page, size) => {
-    const limit = size ? size : 3; // limit = size (default is 3)
+    const limit = size ? size : 10; // limit = size (default is 3)
     const offset = page ? page * limit : 0; // offset = page * size (start counting from page 0)
 
     return { limit, offset };
@@ -21,26 +21,20 @@ const getPagination = (page, size) => {
 //     "currentPage": 1
 // }
 const getPagingData = (data, page, limit) => {
-    // data Sequelize Model method findAndCountAll function has the form
-    // {
-    //     count: 5,
-    //     rows: [
-    //              tutorial {...}
-    //         ]
-    // }
+
     const totalItems = data.count;
-    const tutorials = data.rows;
+    const activities = data.rows;
     const currentPage = page;
     const totalPages = Math.ceil(totalItems / limit);
 
-    return { totalItems, tutorials, totalPages, currentPage };
+    return { totalItems, activities, totalPages, currentPage };
 };
 
 // EXPORT function to display list of all activities (required by ROUTER)
 exports.findAll = (req, res) => {
     //get data from request query string
-    let { page, size, title } = req.query;
-    const condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+    let { page, size, Title } = req.query;
+    const condition = Title ? { title: { [Op.like]: `%${Title}%` } } : null;
 
     // validate page
     if (page && !req.query.page.match(/^(0|[1-9]\d*)$/g)) {
@@ -59,7 +53,7 @@ exports.findAll = (req, res) => {
     // convert page & size into limit & offset options for findAndCountAll
     const { limit, offset } = getPagination(page, size);
 
-    Tutorial.findAndCountAll({ where: condition, limit, offset })
+    Activity.findAndCountAll({ where: condition, limit, offset })
         .then(data => {
             // convert response data into custom format
             const response = getPagingData(data, offset, limit);
@@ -68,7 +62,7 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).json({
                 message:
-                    err.message || "Some error occurred while retrieving tutorials."
+                    err.message || "Some error occurred while retrieving activities."
             });
         });
 };
