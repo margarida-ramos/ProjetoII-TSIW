@@ -74,3 +74,108 @@ exports.create = (req, res) => {
         });
     });
 }
+
+// List just one activity
+exports.findOne = (req, res) => {
+    // obtains only a single entry from the table, using the provided primary key
+    Activity.findByPk(req.params.activityID)
+        .then(data => {
+            if (data === null)
+                res.status(404).json({
+                    message: `Not found Activity with id ${req.params.activityID}.`
+                });
+            else
+                res.json(data);
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: `Error retrieving Activity with id ${req.params.activityID}.`
+            });
+        });
+};
+
+
+// List just one activity
+exports.delete = (req, res) => {
+    // obtains only a single entry from the table, using the provided primary key
+    Activity.destroy({
+        where: {
+            id: req.params.activityID
+        }
+    })
+    .then(function(rowDeleted){ // rowDeleted will return number of rows deleted
+        if(rowDeleted === 1){
+            res.status(200).json({
+                message: `Deleted activity with id ${req.params.activityID}.`
+            });
+         }
+      }, function(err){
+        res.status(500).json({
+            message: err.message || "Some error occurred while creating the Activity."
+        });
+      });
+};
+
+exports.update = (req, res) => {
+    // obtains only a single entry from the table, using the provided primary key
+    Activity.findByPk(req.params.activityID)
+        .then(data => {
+            if (data === null)
+                res.status(404).json({
+                    message: `Not found Activity with id ${req.params.activityID}.`
+                });
+            else
+                if (!req.body.Title || !req.body.Level)
+                {
+                    res.status(400).json({
+                        message: `Error - Data fields are null!`
+                    });
+                }
+
+                data.Title = req.body.Title;
+                data.Level = req.body.Level;
+                data.save();
+                res.status(200).json({
+                    message: `Updated Activity with id ${req.params.activityID}.`
+                });
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: `Error retrieving Activity with id ${req.params.activityID}.`
+            });
+        });
+};
+
+
+/*
+
+// List just one activity
+exports.update = (req, res) => {
+    // obtains only a single entry from the table, using the provided primary key
+    Activity.update(req.body,
+    
+    {
+        where: {
+            id: req.params.activityID
+        }
+    })
+    .then(function(rowUpdated){
+        if(rowUpdated === 1){
+            res.status(200).json({
+                message: `Updated activity with id ${req.params.activityID}.`
+            });
+         }
+         else
+         {
+            res.status(500).json({
+                message: err.message || "Some error occurred while creating the Activity."
+            });
+         }
+      }, function(err){
+        res.status(500).json({
+            message: err.message || "Some error occurred while creating the Activity."
+        });
+      });
+};
+
+*/

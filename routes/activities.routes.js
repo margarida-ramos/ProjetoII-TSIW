@@ -16,6 +16,11 @@ router.route('/')
     .get(activityController.findAll)
     .post(activityController.create);
 
+router.route('/:activityID')
+    .get(activityController.findOne)
+    .delete(activityController.delete)
+    .put(activityController.update);
+
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'ACTIVITIES: what???' });
 })
