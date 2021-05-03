@@ -17,6 +17,9 @@ app.get('/', function (req, res) {
 // routing middleware for resource ACTIVITIES
 app.use('/activities', require('./routes/activities.routes.js'))
 
+// routing middleware for resource ACTIVITIES
+app.use('/courses', require('./routes/courses.routes.js'))
+
 // handle invalid routes
 app.get('*', function (req, res) {
     res.status(404).json({ message: 'WHAT???' });

@@ -26,5 +26,8 @@ db.sequelize = sequelize; //export the Sequelize instance (actual connection poo
 //export TUTORIAL model (and add here any other models defined within the API)
 db.activity = require("./activities.model.js")(sequelize, DataTypes);
 
+//export TUTORIAL model (and add here any other models defined within the API)
+db.course = require("./courses.model.js")(sequelize, DataTypes);
+
 //optional: SYNC
 module.exports = db;

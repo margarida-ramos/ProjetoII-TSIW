@@ -141,7 +141,7 @@ exports.update = (req, res) => {
         })
         .catch(err => {
             res.status(500).json({
-                message: `Error retrieving Activity with id ${req.params.activityID}.`
+                message: `${err.message} Error retrieving Activity with id ${req.params.activityID}.`
             });
         });
 };
