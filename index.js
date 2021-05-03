@@ -17,8 +17,11 @@ app.get('/', function (req, res) {
 // routing middleware for resource ACTIVITIES
 app.use('/activities', require('./routes/activities.routes.js'))
 
-// routing middleware for resource ACTIVITIES
+// routing middleware for resource COURSES
 app.use('/courses', require('./routes/courses.routes.js'))
+
+// routing middleware for resource CLASSES
+app.use('/classes', require('./routes/classes.routes.js'))
 
 // handle invalid routes
 app.get('*', function (req, res) {
