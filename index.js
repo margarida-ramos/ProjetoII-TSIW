@@ -20,6 +20,9 @@ app.use('/activities', require('./routes/activities.routes.js'))
 // routing middleware for resource COURSES
 app.use('/courses', require('./routes/courses.routes.js'))
 
+// routing middleware for resource USERTYPES
+app.use('/usertypes', require('./routes/usertypes.routes.js'))
+
 // routing middleware for resource CLASSES
 app.use('/classes', require('./routes/classes.routes.js'))
 

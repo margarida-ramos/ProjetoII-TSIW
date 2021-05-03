@@ -32,6 +32,9 @@ db.activity = require("./activities.model.js")(sequelize, DataTypes);
 db.course = require("./courses.model.js")(sequelize, DataTypes);
 
 //export TUTORIAL model
+db.usertype = require("./usertypes.model.js")(sequelize, DataTypes);
+
+//export TUTORIAL model
 db.class = require("./classes.model.js")(sequelize, DataTypes);
 
 //export COMMENT model
