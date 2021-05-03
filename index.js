@@ -26,6 +26,9 @@ app.use('/usertypes', require('./routes/usertypes.routes.js'))
 // routing middleware for resource CLASSES
 app.use('/classes', require('./routes/classes.routes.js'))
 
+app.use('/users', require('./routes/users.routes.js'))
+
+
 // handle invalid routes
 app.get('*', function (req, res) {
     res.status(404).json({ message: 'WHAT???' });
