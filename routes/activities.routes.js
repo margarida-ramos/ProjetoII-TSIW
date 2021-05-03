@@ -14,9 +14,8 @@ router.use((req, res, next) => {
 
 router.route('/')
     .get(activityController.findAll)
-//.post(activityController.create);
+    .post(activityController.create);
 
-//send a predefined error message for invalid routes on ACTIVITIES
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'ACTIVITIES: what???' });
 })

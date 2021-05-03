@@ -13,13 +13,6 @@ const getPagination = (page, size) => {
     return { limit, offset };
 };
 
-// function to map default response to desired response data structure
-// {
-//     "totalItems": 8,
-//     "tutorials": [...],
-//     "totalPages": 3,
-//     "currentPage": 1
-// }
 const getPagingData = (data, page, limit) => {
 
     const totalItems = data.count;
@@ -30,7 +23,6 @@ const getPagingData = (data, page, limit) => {
     return { totalItems, activities, totalPages, currentPage };
 };
 
-// EXPORT function to display list of all activities (required by ROUTER)
 exports.findAll = (req, res) => {
     //get data from request query string
     let { page, size, Title } = req.query;
@@ -66,3 +58,19 @@ exports.findAll = (req, res) => {
             });
         });
 };
+
+exports.create = (req, res) => {
+
+    Activity.create(req.body)
+    .then(data => {
+        res.status(201).json({ message: "New Activity created.", location: "/activity/" + data.id });
+    })
+    .catch(err => {
+        if (err.name === 'SequelizeValidationError')
+        res.status(400).json({ message: err.errors[0].message });
+        else
+        res.status(500).json({
+            message: err.message || "Some error occurred while creating the Activity."
+        });
+    });
+}
