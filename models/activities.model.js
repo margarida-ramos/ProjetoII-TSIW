@@ -1,6 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
     const Activity = sequelize.define("activity", {
-        ActivityID: {
+        id: {
+            primaryKey: true,
             type: DataTypes.INTEGER,
             allowNull: false,
             validate: { notNull: { msg: "Title can not be empty!" } }
@@ -11,9 +12,6 @@ module.exports = (sequelize, DataTypes) => {
             validate: { notNull: { msg: "Title can not be empty!" } }
         },
         Level: {
-            type: DataTypes.INTEGER
-        },
-        Zone: {
             type: DataTypes.INTEGER
         }
     }, {
