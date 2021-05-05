@@ -18,13 +18,13 @@ app.get('/', function (req, res) {
 app.use('/activities', require('./routes/activities.routes.js'))
 
 // routing middleware for resource COURSES
-app.use('/courses', require('./routes/courses.routes.js'))
+//app.use('/courses', require('./routes/courses.routes.js'))
 
 // routing middleware for resource USERTYPES
-app.use('/usertypes', require('./routes/usertypes.routes.js'))
+//app.use('/usertypes', require('./routes/usertypes.routes.js'))
 
 // routing middleware for resource CLASSES
-app.use('/classes', require('./routes/classes.routes.js'))
+//app.use('/classes', require('./routes/classes.routes.js'))
 
 app.use('/users', require('./routes/users.routes.js'))
 
