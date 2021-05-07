@@ -144,37 +144,3 @@ exports.update = (req, res) => {
             });
         });
 };
-
-
-/*
-
-// List just one question
-exports.update = (req, res) => {
-    // obtains only a single entry from the table, using the provided primary key
-    Question.update(req.body,
-    
-    {
-        where: {
-            id: req.params.questionID
-        }
-    })
-    .then(function(rowUpdated){
-        if(rowUpdated === 1){
-            res.status(200).json({
-                message: `Updated question with id ${req.params.questionID}.`
-            });
-         }
-         else
-         {
-            res.status(500).json({
-                message: err.message || "Some error occurred while creating the Question."
-            });
-         }
-      }, function(err){
-        res.status(500).json({
-            message: err.message || "Some error occurred while creating the Question."
-        });
-      });
-};
-
-*/

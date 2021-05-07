@@ -21,9 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             validate: { notNull: { msg: "Requirement can not be empty!" } }
         },
         ImageURI: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: { notNull: { msg: "ImageURI can not be empty!" } }
+            type: DataTypes.STRING
         }
     }, {
         timestamps: false

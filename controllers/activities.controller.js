@@ -146,36 +146,3 @@ exports.update = (req, res) => {
         });
 };
 
-
-/*
-
-// List just one activity
-exports.update = (req, res) => {
-    // obtains only a single entry from the table, using the provided primary key
-    Activity.update(req.body,
-    
-    {
-        where: {
-            id: req.params.activityID
-        }
-    })
-    .then(function(rowUpdated){
-        if(rowUpdated === 1){
-            res.status(200).json({
-                message: `Updated activity with id ${req.params.activityID}.`
-            });
-         }
-         else
-         {
-            res.status(500).json({
-                message: err.message || "Some error occurred while creating the Activity."
-            });
-         }
-      }, function(err){
-        res.status(500).json({
-            message: err.message || "Some error occurred while creating the Activity."
-        });
-      });
-};
-
-*/

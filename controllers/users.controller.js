@@ -35,6 +35,37 @@ exports.create = (req, res) => {
         });
 };
 
+
+
+
+// Display list of all badges for a given user (with user info)
+exports.getBadges = (req, res) => {
+
+    User.findByPk(req.params.userID,
+        {
+            include: {
+                model: Badge,
+                through: { attributes: [] } //remove data retrieved from join table
+            }
+        })
+        .then(data => {
+            if (data === null)
+                res.status(404).json({
+                    message: `Not found User with id ${req.params.userID}.`
+                });
+            else
+                res.status(200).json(data);
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: `Error retrieving Badges for User with id ${req.params.userID}.`
+            });
+        });
+};
+
+
+
+
 exports.findOne = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
     User.findByPk(req.params.username)

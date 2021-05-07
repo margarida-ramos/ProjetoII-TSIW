@@ -25,47 +25,33 @@ sequelize.authenticate()
 const db = {};
 db.sequelize = sequelize;
 
-//export TUTORIAL model
+//export all models
 db.activity = require("./activities.model.js")(sequelize, DataTypes);
 db.user = require("./users.model.js")(sequelize, DataTypes);
-
-//export TUTORIAL model
 db.course = require("./courses.model.js")(sequelize, DataTypes);
-
-//export TUTORIAL model
 db.usertype = require("./usertypes.model.js")(sequelize, DataTypes);
-
-//export TUTORIAL model
 db.class = require("./classes.model.js")(sequelize, DataTypes);
-
-//export TUTORIAL model
 db.history = require("./histories.model.js")(sequelize, DataTypes);
-
-//export TUTORIAL model
 db.badge = require("./badges.model.js")(sequelize, DataTypes);
-
-//export TUTORIAL model
 db.notification = require("./notifications.model.js")(sequelize, DataTypes);
-
-//export TUTORIAL model
 db.submission = require("./submissions.model.js")(sequelize, DataTypes);
-
-//export TUTORIAL model
 db.question = require("./questions.model.js")(sequelize, DataTypes);
 
-
+//define the User-Badge m:n relationship
+db.badge.belongsToMany(db.user, { through: 'UserBadges' });
+db.user.belongsToMany(db.badge, { through: 'UserBadges' });
 
 //define 1:N relationships
 db.course.hasMany(db.activity);
 db.activity.belongsTo(db.course);
 
-db.class.hasMany(db.activity); 
+db.class.hasMany(db.activity);
 db.activity.belongsTo(db.class);
 
 db.user.hasMany(db.history);
-db.history.belongsTo(db.user); 
+db.history.belongsTo(db.user);
 
-db.history.belongsTo(db.activity); 
+db.history.belongsTo(db.activity);
 db.activity.hasMany(db.history);
 
 db.user.hasMany(db.notification);
@@ -86,10 +72,7 @@ db.user.belongsTo(db.course);
 db.usertype.hasMany(db.user);
 db.user.belongsTo(db.usertype);
 
-//db.tutorial.hasMany(db.comment); // tutorialId is added into Comment model as FK
-//db.comment.belongsTo(db.tutorial);
-
-/* optionally: SYNC
+/* FAZER SYNC
 db.sequelize.sync()
 .then(() => {
     console.log('DB is successfully synchronized')

@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const badgeController = require('../controllers/badges.controller.js');
+const { route } = require('./activities.routes.js');
 
 // middleware for all routes related with badges
 router.use((req, res, next) => {
@@ -20,6 +21,10 @@ router.route('/:badgeID')
     .get(badgeController.findOne)
     .delete(badgeController.delete)
     .put(badgeController.update);
+
+router.route('/:badgeID/user/:userID')
+    .post(badgeController.assignBadge)
+    .delete(badgeController.unassignBadge);
 
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'BADGES: what???' });
