@@ -38,6 +38,22 @@ db.usertype = require("./usertypes.model.js")(sequelize, DataTypes);
 //export TUTORIAL model
 db.class = require("./classes.model.js")(sequelize, DataTypes);
 
+//export TUTORIAL model
+db.class = require("./histories.model.js")(sequelize, DataTypes);
+
+//export TUTORIAL model
+db.class = require("./badges.model.js")(sequelize, DataTypes);
+
+//export TUTORIAL model
+db.class = require("./notifications.model.js")(sequelize, DataTypes);
+
+//export TUTORIAL model
+db.class = require("./submissions.model.js")(sequelize, DataTypes);
+
+//export TUTORIAL model
+db.class = require("./questions.model.js")(sequelize, DataTypes);
+
+
 //export COMMENT model
 //db.comment = require("./comments.model.js")(sequelize, DataTypes);
 
