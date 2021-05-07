@@ -39,19 +39,19 @@ db.usertype = require("./usertypes.model.js")(sequelize, DataTypes);
 db.class = require("./classes.model.js")(sequelize, DataTypes);
 
 //export TUTORIAL model
-db.class = require("./histories.model.js")(sequelize, DataTypes);
+db.history = require("./histories.model.js")(sequelize, DataTypes);
 
 //export TUTORIAL model
-db.class = require("./badges.model.js")(sequelize, DataTypes);
+db.badge = require("./badges.model.js")(sequelize, DataTypes);
 
 //export TUTORIAL model
-db.class = require("./notifications.model.js")(sequelize, DataTypes);
+db.notification = require("./notifications.model.js")(sequelize, DataTypes);
 
 //export TUTORIAL model
-db.class = require("./submissions.model.js")(sequelize, DataTypes);
+db.submission = require("./submissions.model.js")(sequelize, DataTypes);
 
 //export TUTORIAL model
-db.class = require("./questions.model.js")(sequelize, DataTypes);
+db.question = require("./questions.model.js")(sequelize, DataTypes);
 
 
 
@@ -62,11 +62,11 @@ db.activity.belongsTo(db.course);
 db.class.hasMany(db.activity); 
 db.activity.belongsTo(db.class);
 
-db.history.hasOne(db.user); 
-db.user.belongsTo(db.history);
+db.user.hasMany(db.history);
+db.history.belongsTo(db.user); 
 
-db.history.hasOne(db.activity); 
-db.activity.belongsTo(db.history);
+db.history.belongsTo(db.activity); 
+db.activity.hasMany(db.history);
 
 db.user.hasMany(db.notification);
 db.notification.belongsTo(db.user);
