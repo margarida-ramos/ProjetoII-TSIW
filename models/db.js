@@ -24,10 +24,15 @@ const db = {};
 db.sequelize = sequelize; //export the Sequelize instance (actual connection pool)
 
 db.activity = require("./activities.model.js")(sequelize, DataTypes);
-
 db.course = require("./courses.model.js")(sequelize, DataTypes);
-
 db.class = require("./classes.model.js")(sequelize, DataTypes);
+db.badge = require("./badges.model.js")(sequelize, DataTypes);
+db.notification = require("./notifications.model.js")(sequelize, DataTypes);
+db.submission = require("./submissions.model.js")(sequelize, DataTypes);
+db.user = require("./users.model.js")(sequelize, DataTypes);
+db.usertype = require("./usertypes.model.js")(sequelize, DataTypes);
+db.question = require("./questions.model.js")(sequelize, DataTypes);
+db.course = require("./courses.model.js")(sequelize, DataTypes);
 
 //optional: SYNC
 module.exports = db;

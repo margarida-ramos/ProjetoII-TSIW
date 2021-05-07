@@ -54,20 +54,48 @@ db.class = require("./submissions.model.js")(sequelize, DataTypes);
 db.class = require("./questions.model.js")(sequelize, DataTypes);
 
 
-//export COMMENT model
-//db.comment = require("./comments.model.js")(sequelize, DataTypes);
 
-//define the 1:N relationship
+//define 1:N relationships
+db.course.hasMany(db.activity);
+db.activity.belongsTo(db.course);
+
+db.class.hasMany(db.activity); 
+db.activity.belongsTo(db.class);
+
+db.history.hasOne(db.user); 
+db.user.belongsTo(db.history);
+
+db.history.hasOne(db.activity); 
+db.activity.belongsTo(db.history);
+
+db.user.hasMany(db.notification);
+db.notification.belongsTo(db.user);
+
+db.activity.hasMany(db.question);
+db.question.belongsTo(db.activity);
+
+db.submission.hasMany(db.question);
+db.question.belongsTo(db.submission);
+
+db.user.hasMany(db.submission);
+db.submission.belongsTo(db.user);
+
+db.course.hasMany(db.user);
+db.user.belongsTo(db.course);
+
+db.usertype.hasMany(db.user);
+db.user.belongsTo(db.usertype);
+
 //db.tutorial.hasMany(db.comment); // tutorialId is added into Comment model as FK
 //db.comment.belongsTo(db.tutorial);
 
 /* optionally: SYNC
 db.sequelize.sync()
-    .then(() => {
-        console.log('DB is successfully synchronized')
-    })
-    .catch(e => {
-        console.log(e)
-    }); */
+.then(() => {
+    console.log('DB is successfully synchronized')
+})
+.catch(e => {
+    console.log(e)
+}); */
 
 module.exports = db;
