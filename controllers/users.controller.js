@@ -6,9 +6,14 @@ const { Op } = require('sequelize');
 
 exports.findAll = (req, res) => {
 
-    User.findAndCountAll(res.body)
+    User.findAll(res.body)
         .then(data => {
-            res.status(200).json(data);
+            if (data == '') {
+                res.status(200).json({ message: "Users is empty" });
+            } else {
+                res.status(200).json(data);
+            }
+
         })
         .catch(err => {
             res.status(500).json({
@@ -84,7 +89,7 @@ exports.update = (req, res) => {
                     message: `Not found User with username ${req.params.username}.`
                 });
             else
-                if (!req.body.Name || !req.body.BirthDate) {
+                if (!req.body.Username || !req.body.Name || !req.body.BirthDate || !req.body.Password) {
                     res.status(400).json({
                         message: `Error - Data fields are null!`
                     });
@@ -92,6 +97,9 @@ exports.update = (req, res) => {
 
             data.Name = req.body.Name;
             data.BirthDate = req.body.BirthDate;
+            data.Username = req.body.Username;
+            data.Password = req.body.Password;
+
             data.save();
             res.status(200).json({
                 message: `Updated User with username ${req.params.username}.`
