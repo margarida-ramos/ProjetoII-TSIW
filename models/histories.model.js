@@ -8,12 +8,12 @@ module.exports = (sequelize, DataTypes) => {
         Description: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notNull: { msg: "Description can not be empty!" } }
+            validate: { notEmpty: { msg: "Description can not be empty!" } }
         },
         Date: {
             type: DataTypes.DATE,
             allowNull: false,
-            validate: { notNull: { msg: "Date can not be empty!" } }
+            validate: { notEmpty: { msg: "Date can not be empty!" } }
         }
     }, {
         timestamps: false
