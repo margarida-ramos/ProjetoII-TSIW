@@ -14,20 +14,17 @@ app.get('/', function (req, res) {
     res.status(200).json({ message: 'home -- PROJETO II api' });
 });
 
-// routing middleware for resource ACTIVITIES
+// routing middleware for resources
 app.use('/activities', require('./routes/activities.routes.js'))
-
-// routing middleware for resource COURSES
 app.use('/courses', require('./routes/courses.routes.js'))
-
-// routing middleware for resource USERTYPES
 app.use('/usertypes', require('./routes/usertypes.routes.js'))
-
-// routing middleware for resource CLASSES
 app.use('/classes', require('./routes/classes.routes.js'))
-
+app.use('/badges', require('./routes/badges.routes.js'))
+app.use('/histories', require('./routes/histories.routes.js'))
+app.use('/notifications', require('./routes/notifications.routes.js'))
+app.use('/questions', require('./routes/questions.routes.js'))
+app.use('/submissions', require('./routes/submissions.routes.js'))
 app.use('/users', require('./routes/users.routes.js'))
-
 
 // handle invalid routes
 app.get('*', function (req, res) {

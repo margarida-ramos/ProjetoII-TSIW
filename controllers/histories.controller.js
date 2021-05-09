@@ -1,5 +1,5 @@
 const db = require("../models/index.js");
-const Activity = db.activity;
+const History = db.history;
 
 //necessary for LIKE operator
 const { Op } = require('sequelize');
@@ -16,17 +16,17 @@ const getPagination = (page, size) => {
 const getPagingData = (data, page, limit) => {
 
     const totalItems = data.count;
-    const activities = data.rows;
+    const histories = data.rows;
     const currentPage = page;
     const totalPages = Math.ceil(totalItems / limit);
 
-    return { totalItems, activities, totalPages, currentPage };
+    return { totalItems, histories, totalPages, currentPage };
 };
 
 exports.findAll = (req, res) => {
     //get data from request query string
-    let { page, size, Title } = req.query;
-    const condition = Title ? { title: { [Op.like]: `%${Title}%` } } : null;
+    let { page, size, Description } = req.query;
+    const condition = Description ? { description: { [Op.like]: `%${Description}%` } } : null;
 
     // validate page
     if (page && !req.query.page.match(/^(0|[1-9]\d*)$/g)) {
@@ -45,7 +45,7 @@ exports.findAll = (req, res) => {
     // convert page & size into limit & offset options for findAndCountAll
     const { limit, offset } = getPagination(page, size);
 
-    Activity.findAndCountAll({ where: condition, limit, offset })
+    History.findAndCountAll({ where: condition, limit, offset })
         .then(data => {
             // convert response data into custom format
             const response = getPagingData(data, offset, limit);
@@ -54,98 +54,131 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).json({
                 message:
-                    err.message || "Some error occurred while retrieving activities."
+                    err.message || "Some error occurred while retrieving histories."
             });
         });
 };
 
 exports.create = (req, res) => {
 
-    Activity.create(req.body)
+    History.create(req.body)
         .then(data => {
-            res.status(201).json({ message: "New Activity created.", location: "/activity/" + data.id });
+            res.status(201).json({ message: "New History created.", location: "/history/" + data.id });
         })
         .catch(err => {
             if (err.name === 'SequelizeValidationError')
                 res.status(400).json({ message: err.errors[0].message });
             else
                 res.status(500).json({
-                    message: err.message || "Some error occurred while creating the Activity."
+                    message: err.message || "Some error occurred while creating the History."
                 });
         });
 }
 
-// List just one activity
+// List just one history
 exports.findOne = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
-    Activity.findByPk(req.params.activityID)
+    History.findByPk(req.params.historyID)
         .then(data => {
             if (data === null)
                 res.status(404).json({
-                    message: `Not found Activity with id ${req.params.activityID}.`
+                    message: `Not found History with id ${req.params.historyID}.`
                 });
             else
                 res.json(data);
         })
         .catch(err => {
             res.status(500).json({
-                message: `Error retrieving Activity with id ${req.params.activityID}.`
+                message: `Error retrieving History with id ${req.params.historyID}.`
             });
         });
 };
 
 
-// List just one activity
+// List just one history
 exports.delete = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
-    Activity.destroy({
+    History.destroy({
         where: {
-            id: req.params.activityID
+            id: req.params.historyID
         }
     })
         .then(function (rowDeleted) { // rowDeleted will return number of rows deleted
             if (rowDeleted === 1) {
                 res.status(200).json({
-                    message: `Deleted activity with id ${req.params.activityID}.`
+                    message: `Deleted history with id ${req.params.historyID}.`
                 });
             } else {
                 res.status(404).json({
-                    message: `Activity with id ${req.params.activityID} not found.`
+                    message: `History with id ${req.params.historyID} not found.`
                 });
             }
+
         }, function (err) {
             res.status(500).json({
-                message: err.message || "Some error occurred while creating the Activity."
+                message: err.message || "Some error occurred while creating the History."
             });
         });
 };
 
 exports.update = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
-    Activity.findByPk(req.params.activityID)
+    History.findByPk(req.params.historyID)
         .then(data => {
             if (data === null)
                 res.status(404).json({
-                    message: `Not found Activity with id ${req.params.activityID}.`
+                    message: `Not found History with id ${req.params.historyID}.`
                 });
             else
-                if (!req.body.Title || !req.body.Level) {
+                if (!req.body.Description) {
                     res.status(400).json({
                         message: `Error - Data fields are null!`
                     });
                 }
 
-            data.Title = req.body.Title;
-            data.Level = req.body.Level;
+            data.Description = req.body.Description;
             data.save();
             res.status(200).json({
-                message: `Updated Activity with id ${req.params.activityID}.`
+                message: `Updated History with id ${req.params.historyID}.`
             });
         })
         .catch(err => {
             res.status(500).json({
-                message: `${err.message} Error retrieving Activity with id ${req.params.activityID}.`
+                message: `${err.message} Error retrieving History with id ${req.params.historyID}.`
             });
         });
 };
 
+
+/*
+
+// List just one history
+exports.update = (req, res) => {
+    // obtains only a single entry from the table, using the provided primary key
+    History.update(req.body,
+
+    {
+        where: {
+            id: req.params.historyID
+        }
+    })
+    .then(function(rowUpdated){
+        if(rowUpdated === 1){
+            res.status(200).json({
+                message: `Updated history with id ${req.params.historyID}.`
+            });
+         }
+         else
+         {
+            res.status(500).json({
+                message: err.message || "Some error occurred while creating the History."
+            });
+         }
+      }, function(err){
+        res.status(500).json({
+            message: err.message || "Some error occurred while creating the History."
+        });
+      });
+};
+
+*/
