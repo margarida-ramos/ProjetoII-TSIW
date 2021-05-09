@@ -62,17 +62,17 @@ exports.findAll = (req, res) => {
 exports.create = (req, res) => {
 
     Notification.create(req.body)
-    .then(data => {
-        res.status(201).json({ message: "New Notification created.", location: "/notification/" + data.id });
-    })
-    .catch(err => {
-        if (err.name === 'SequelizeValidationError')
-        res.status(400).json({ message: err.errors[0].message });
-        else
-        res.status(500).json({
-            message: err.message || "Some error occurred while creating the Notification."
+        .then(data => {
+            res.status(201).json({ message: "New Notification created.", location: "/notification/" + data.id });
+        })
+        .catch(err => {
+            if (err.name === 'SequelizeValidationError')
+                res.status(400).json({ message: err.errors[0].message });
+            else
+                res.status(500).json({
+                    message: err.message || "Some error occurred while creating the Notification."
+                });
         });
-    });
 }
 
 // List just one notification
@@ -103,17 +103,21 @@ exports.delete = (req, res) => {
             id: req.params.notificationID
         }
     })
-    .then(function(rowDeleted){ // rowDeleted will return number of rows deleted
-        if(rowDeleted === 1){
-            res.status(200).json({
-                message: `Deleted notification with id ${req.params.notificationID}.`
+        .then(function (rowDeleted) { // rowDeleted will return number of rows deleted
+            if (rowDeleted === 1) {
+                res.status(200).json({
+                    message: `Deleted notification with id ${req.params.notificationID}.`
+                });
+            } else {
+                res.status(404).json({
+                    message: `Notification with id ${req.params.notificationID} not found.`
+                });
+            }
+        }, function (err) {
+            res.status(500).json({
+                message: err.message || "Some error occurred while creating the Notification."
             });
-         }
-      }, function(err){
-        res.status(500).json({
-            message: err.message || "Some error occurred while creating the Notification."
         });
-      });
 };
 
 exports.update = (req, res) => {
@@ -125,18 +129,17 @@ exports.update = (req, res) => {
                     message: `Not found Notification with id ${req.params.notificationID}.`
                 });
             else
-                if (!req.body.Description)
-                {
+                if (!req.body.Description) {
                     res.status(400).json({
                         message: `Error - Data fields are null!`
                     });
                 }
 
-                data.Description = req.body.Description;
-                data.save();
-                res.status(200).json({
-                    message: `Updated Notification with id ${req.params.notificationID}.`
-                });
+            data.Description = req.body.Description;
+            data.save();
+            res.status(200).json({
+                message: `Updated Notification with id ${req.params.notificationID}.`
+            });
         })
         .catch(err => {
             res.status(500).json({
@@ -152,7 +155,7 @@ exports.update = (req, res) => {
 exports.update = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
     Notification.update(req.body,
-    
+
     {
         where: {
             id: req.params.notificationID

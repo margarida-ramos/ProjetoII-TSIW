@@ -62,17 +62,17 @@ exports.findAll = (req, res) => {
 exports.create = (req, res) => {
 
     Submission.create(req.body)
-    .then(data => {
-        res.status(201).json({ message: "New Submission created.", location: "/submission/" + data.id });
-    })
-    .catch(err => {
-        if (err.name === 'SequelizeValidationError')
-        res.status(400).json({ message: err.errors[0].message });
-        else
-        res.status(500).json({
-            message: err.message || "Some error occurred while creating the Submission."
+        .then(data => {
+            res.status(201).json({ message: "New Submission created.", location: "/submission/" + data.id });
+        })
+        .catch(err => {
+            if (err.name === 'SequelizeValidationError')
+                res.status(400).json({ message: err.errors[0].message });
+            else
+                res.status(500).json({
+                    message: err.message || "Some error occurred while creating the Submission."
+                });
         });
-    });
 }
 
 // List just one submission
@@ -103,17 +103,21 @@ exports.delete = (req, res) => {
             id: req.params.submissionID
         }
     })
-    .then(function(rowDeleted){ // rowDeleted will return number of rows deleted
-        if(rowDeleted === 1){
-            res.status(200).json({
-                message: `Deleted submission with id ${req.params.submissionID}.`
+        .then(function (rowDeleted) { // rowDeleted will return number of rows deleted
+            if (rowDeleted === 1) {
+                res.status(200).json({
+                    message: `Deleted submission with id ${req.params.submissionID}.`
+                });
+            } else {
+                res.status(404).json({
+                    message: `Submission with id ${req.params.submissionID} not found.`
+                });
+            }
+        }, function (err) {
+            res.status(500).json({
+                message: err.message || "Some error occurred while creating the Submission."
             });
-         }
-      }, function(err){
-        res.status(500).json({
-            message: err.message || "Some error occurred while creating the Submission."
         });
-      });
 };
 
 exports.update = (req, res) => {
@@ -125,18 +129,17 @@ exports.update = (req, res) => {
                     message: `Not found Submission with id ${req.params.submissionID}.`
                 });
             else
-                if (!req.body.Description)
-                {
+                if (!req.body.Description) {
                     res.status(400).json({
                         message: `Error - Data fields are null!`
                     });
                 }
 
-                data.Description = req.body.Description;
-                data.save();
-                res.status(200).json({
-                    message: `Updated Submission with id ${req.params.submissionID}.`
-                });
+            data.Description = req.body.Description;
+            data.save();
+            res.status(200).json({
+                message: `Updated Submission with id ${req.params.submissionID}.`
+            });
         })
         .catch(err => {
             res.status(500).json({
@@ -152,7 +155,7 @@ exports.update = (req, res) => {
 exports.update = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
     Submission.update(req.body,
-    
+
     {
         where: {
             id: req.params.submissionID

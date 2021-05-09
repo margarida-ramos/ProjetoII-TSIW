@@ -102,6 +102,10 @@ exports.delete = (req, res) => {
                 res.status(200).json({
                     message: `Deleted User with username ${req.params.username}.`
                 });
+            } else {
+                res.status(404).json({
+                    message: `Username ${req.params.username} not found.`
+                });
             }
         }, function (err) {
             res.status(500).json({

@@ -172,6 +172,10 @@ exports.delete = (req, res) => {
                 res.status(200).json({
                     message: `Deleted badge with id ${req.params.badgeID}.`
                 });
+            } else {
+                res.status(404).json({
+                    message: `Badge with id ${req.params.badgeID} not found.`
+                });
             }
         }, function (err) {
             res.status(500).json({

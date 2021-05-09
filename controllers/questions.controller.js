@@ -62,17 +62,17 @@ exports.findAll = (req, res) => {
 exports.create = (req, res) => {
 
     Question.create(req.body)
-    .then(data => {
-        res.status(201).json({ message: "New Question created.", location: "/question/" + data.id });
-    })
-    .catch(err => {
-        if (err.name === 'SequelizeValidationError')
-        res.status(400).json({ message: err.errors[0].message });
-        else
-        res.status(500).json({
-            message: err.message || "Some error occurred while creating the Question."
+        .then(data => {
+            res.status(201).json({ message: "New Question created.", location: "/question/" + data.id });
+        })
+        .catch(err => {
+            if (err.name === 'SequelizeValidationError')
+                res.status(400).json({ message: err.errors[0].message });
+            else
+                res.status(500).json({
+                    message: err.message || "Some error occurred while creating the Question."
+                });
         });
-    });
 }
 
 // List just one question
@@ -103,17 +103,21 @@ exports.delete = (req, res) => {
             id: req.params.questionID
         }
     })
-    .then(function(rowDeleted){ // rowDeleted will return number of rows deleted
-        if(rowDeleted === 1){
-            res.status(200).json({
-                message: `Deleted question with id ${req.params.questionID}.`
+        .then(function (rowDeleted) { // rowDeleted will return number of rows deleted
+            if (rowDeleted === 1) {
+                res.status(200).json({
+                    message: `Deleted question with id ${req.params.questionID}.`
+                });
+            } else {
+                res.status(404).json({
+                    message: `Question with id ${req.params.questionID} not found.`
+                });
+            }
+        }, function (err) {
+            res.status(500).json({
+                message: err.message || "Some error occurred while creating the Question."
             });
-         }
-      }, function(err){
-        res.status(500).json({
-            message: err.message || "Some error occurred while creating the Question."
         });
-      });
 };
 
 exports.update = (req, res) => {
@@ -125,18 +129,17 @@ exports.update = (req, res) => {
                     message: `Not found Question with id ${req.params.questionID}.`
                 });
             else
-                if (!req.body.Description)
-                {
+                if (!req.body.Description) {
                     res.status(400).json({
                         message: `Error - Data fields are null!`
                     });
                 }
 
-                data.Description = req.body.Description;
-                data.save();
-                res.status(200).json({
-                    message: `Updated Question with id ${req.params.questionID}.`
-                });
+            data.Description = req.body.Description;
+            data.save();
+            res.status(200).json({
+                message: `Updated Question with id ${req.params.questionID}.`
+            });
         })
         .catch(err => {
             res.status(500).json({

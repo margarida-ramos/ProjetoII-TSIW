@@ -62,17 +62,17 @@ exports.findAll = (req, res) => {
 exports.create = (req, res) => {
 
     Activity.create(req.body)
-    .then(data => {
-        res.status(201).json({ message: "New Activity created.", location: "/activity/" + data.id });
-    })
-    .catch(err => {
-        if (err.name === 'SequelizeValidationError')
-        res.status(400).json({ message: err.errors[0].message });
-        else
-        res.status(500).json({
-            message: err.message || "Some error occurred while creating the Activity."
+        .then(data => {
+            res.status(201).json({ message: "New Activity created.", location: "/activity/" + data.id });
+        })
+        .catch(err => {
+            if (err.name === 'SequelizeValidationError')
+                res.status(400).json({ message: err.errors[0].message });
+            else
+                res.status(500).json({
+                    message: err.message || "Some error occurred while creating the Activity."
+                });
         });
-    });
 }
 
 // List just one activity
@@ -103,17 +103,21 @@ exports.delete = (req, res) => {
             id: req.params.activityID
         }
     })
-    .then(function(rowDeleted){ // rowDeleted will return number of rows deleted
-        if(rowDeleted === 1){
-            res.status(200).json({
-                message: `Deleted activity with id ${req.params.activityID}.`
+        .then(function (rowDeleted) { // rowDeleted will return number of rows deleted
+            if (rowDeleted === 1) {
+                res.status(200).json({
+                    message: `Deleted activity with id ${req.params.activityID}.`
+                });
+            } else {
+                res.status(404).json({
+                    message: `Activity with id ${req.params.activityID} not found.`
+                });
+            }
+        }, function (err) {
+            res.status(500).json({
+                message: err.message || "Some error occurred while creating the Activity."
             });
-         }
-      }, function(err){
-        res.status(500).json({
-            message: err.message || "Some error occurred while creating the Activity."
         });
-      });
 };
 
 exports.update = (req, res) => {
@@ -125,19 +129,18 @@ exports.update = (req, res) => {
                     message: `Not found Activity with id ${req.params.activityID}.`
                 });
             else
-                if (!req.body.Title || !req.body.Level)
-                {
+                if (!req.body.Title || !req.body.Level) {
                     res.status(400).json({
                         message: `Error - Data fields are null!`
                     });
                 }
 
-                data.Title = req.body.Title;
-                data.Level = req.body.Level;
-                data.save();
-                res.status(200).json({
-                    message: `Updated Activity with id ${req.params.activityID}.`
-                });
+            data.Title = req.body.Title;
+            data.Level = req.body.Level;
+            data.save();
+            res.status(200).json({
+                message: `Updated Activity with id ${req.params.activityID}.`
+            });
         })
         .catch(err => {
             res.status(500).json({
