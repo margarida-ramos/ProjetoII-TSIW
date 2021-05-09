@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         Description: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notNull: { msg: "Title can not be empty!" } }
+            validate: { notEmpty: { msg: "Title can not be empty!" } }
         }
     }, {
         timestamps: false
