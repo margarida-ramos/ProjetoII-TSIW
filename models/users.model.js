@@ -9,9 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             validate: { notNull: { msg: "Username can not be empty!" } }
         },
         Name: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: { notNull: { msg: "Name can not be empty!" } }
+            type: DataTypes.STRING
         },
         Password: {
             type: DataTypes.STRING,
@@ -19,9 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             validate: { notNull: { msg: "Password can not be empty!" } }
         },
         BirthDate: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            validate: { notNull: { msg: "BirthDate can not be empty!" } }
+            type: DataTypes.DATE
         },
         Sex: {
             type: DataTypes.STRING

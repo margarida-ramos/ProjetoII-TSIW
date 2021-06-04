@@ -4,6 +4,7 @@ const User = db.user;
 const { Op } = require('sequelize');
 
 
+
 exports.findAll = (req, res) => {
 
     User.findAll(res.body)
@@ -23,6 +24,25 @@ exports.findAll = (req, res) => {
         });
 };
 
+/*
+exports.getAllUsers = async (req, res) => {
+    try {
+        res.status(200).json("Admin Content.");
+    }
+    catch (err) {
+        res.status(500).json({ message: err.message });
+    };
+};
+
+exports.getUser = async (req, res) => {
+    try {
+        return res.status(200).json("Admin or Logged User Content.");
+    }
+    catch (err) {
+        res.status(500).json({ message: err.message });
+    };
+};
+*/
 
 exports.create = (req, res) => {
 
@@ -71,6 +91,7 @@ exports.getBadges = (req, res) => {
 
 
 
+
 exports.findOne = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
     User.findByPk(req.params.username)
@@ -88,6 +109,7 @@ exports.findOne = (req, res) => {
             });
         });
 };
+
 
 
 exports.delete = (req, res) => {

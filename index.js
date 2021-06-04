@@ -11,13 +11,14 @@ app.use(express.json());
 
 // root route -- /api/
 app.get('/', function (req, res) {
-    res.status(200).json({ message: 'home -- PROJETO II api' });
+    res.status(200).json({ message: 'Home -- PROJETO II api' });
 });
 
 // routing middleware for resources
+app.use('/auth', require('./routes/auth.routes.js'))
 app.use('/activities', require('./routes/activities.routes.js'))
 app.use('/courses', require('./routes/courses.routes.js'))
-app.use('/usertypes', require('./routes/usertypes.routes.js'))
+app.use('/roles', require('./routes/roles.routes.js'))
 app.use('/classes', require('./routes/classes.routes.js'))
 app.use('/badges', require('./routes/badges.routes.js'))
 app.use('/histories', require('./routes/histories.routes.js'))

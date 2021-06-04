@@ -1,8 +1,8 @@
 const express = require('express');
 let router = express.Router();
-const usertypeController = require('../controllers/usertypes.controller.js');
+const roleController = require('../controllers/roles.controller.js');
 
-// middleware for all routes related with usertypes
+// middleware for all routes related with roles
 router.use((req, res, next) => {
     const start = Date.now();
     res.on("finish", () => { //finish event is emitted once the response is sent to the client
@@ -13,16 +13,16 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(usertypeController.findAll)
-    .post(usertypeController.create);
+    .get(roleController.findAll)
+    .post(roleController.create);
 
-router.route('/:usertypeID')
-    .get(usertypeController.findOne)
-    .delete(usertypeController.delete)
-    .put(usertypeController.update);
+router.route('/:roleID')
+    .get(roleController.findOne)
+    .delete(roleController.delete)
+    .put(roleController.update);
 
 router.all('*', function (req, res) {
-    res.status(404).json({ message: 'USERTYPES: what???' });
+    res.status(404).json({ message: 'ROLES: what???' });
 })
 
 // EXPORT ROUTES (required by APP)
