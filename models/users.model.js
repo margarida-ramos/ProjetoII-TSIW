@@ -9,11 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             validate: { notEmpty: { msg: "Username can not be empty!" } }
         },
         Name: {
-<<<<<<< HEAD
             type: DataTypes.STRING
-=======
-       
->>>>>>> 5628624973df792413510dc8ddf9fb28997b9179
         },
         Password: {
             type: DataTypes.STRING,
