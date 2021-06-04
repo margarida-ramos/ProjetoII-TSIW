@@ -8,22 +8,22 @@ module.exports = (sequelize, DataTypes) => {
         Question: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notNull: { msg: "Question can not be empty!" } }
+            validate: { notEmpty: { msg: "Question can not be empty!" } }
         },
         Answers: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notNull: { msg: "Answers can not be empty!" } }
+            validate: { notEmpty: { msg: "Answers can not be empty!" } }
         },
         RightAnswers: {
             type: DataTypes.DATE,
             allowNull: false,
-            validate: { notNull: { msg: "RightAnswers can not be empty!" } }
+            validate: { notEmpty: { msg: "RightAnswers can not be empty!" } }
         },
         ImageURI: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            validate: { notNull: { msg: "ImageURI can not be empty!" } }
+            validate: { notEmpty: { msg: "ImageURI can not be empty!" } }
         }
     }, {
         timestamps: false

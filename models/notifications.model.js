@@ -1,32 +1,32 @@
 module.exports = (sequelize, DataTypes) => {
-    const Question = sequelize.define("question", {
+    const Notification = sequelize.define("notification", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        Question: {
+        Message: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notNull: { msg: "Question can not be empty!" } }
+            validate: { notEmpty: { msg: "Message can not be empty!" } }
         },
-        Answers: {
+        Link: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notNull: { msg: "Answers can not be empty!" } }
+            validate: { notEmpty: { msg: "Link can not be empty!" } }
         },
-        RightAnswer: {
-            type: DataTypes.STRING,
+        Date: {
+            type: DataTypes.DATE,
             allowNull: false,
-            validate: { notNull: { msg: "RightAnswer can not be empty!" } }
+            validate: { notEmpty: { msg: "Date can not be empty!" } }
         },
-        ImageURI: {
-            type: DataTypes.STRING,
+        Read: {
+            type: DataTypes.BOOLEAN,
             allowNull: false,
-            validate: { notNull: { msg: "ImageURI can not be empty!" } }
+            validate: { notEmpty: { msg: "ImageURI can not be empty!" } }
         }
     }, {
         timestamps: false
     });
-    return Question;
+    return Notification;
 };

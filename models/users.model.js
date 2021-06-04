@@ -6,15 +6,19 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             unique: true,
             allowNull: false,
-            validate: { notNull: { msg: "Username can not be empty!" } }
+            validate: { notEmpty: { msg: "Username can not be empty!" } }
         },
         Name: {
+<<<<<<< HEAD
             type: DataTypes.STRING
+=======
+       
+>>>>>>> 5628624973df792413510dc8ddf9fb28997b9179
         },
         Password: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notNull: { msg: "Password can not be empty!" } }
+            validate: { notEmpty: { msg: "Password can not be empty!" } }
         },
         BirthDate: {
             type: DataTypes.DATE

@@ -8,17 +8,17 @@ module.exports = (sequelize, DataTypes) => {
         Title: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notNull: { msg: "Title can not be empty!" } }
+            validate: { notEmpty: { msg: "Title can not be empty!" } }
         },
         Description: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notNull: { msg: "Description can not be empty!" } }
+            validate: { notEmpty: { msg: "Description can not be empty!" } }
         },
         Requirement: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notNull: { msg: "Requirement can not be empty!" } }
+            validate: { notEmpty: { msg: "Requirement can not be empty!" } }
         },
         ImageURI: {
             type: DataTypes.STRING

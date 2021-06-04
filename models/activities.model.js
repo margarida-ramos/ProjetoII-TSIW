@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         Title: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notNull: { msg: "Title can not be empty!" } }
+            validate: { notEmpty: { msg: "Title can not be empty!" } }
         },
         Level: {
             type: DataTypes.INTEGER
