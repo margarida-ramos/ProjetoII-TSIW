@@ -1,43 +1,43 @@
 const db = require("../models/index.js");
-const Badge = db.badge;
+const Theme = db.theme;
 
 const { Op } = require('sequelize');
 
 exports.findAll = (req, res) => {
 
 
-    Badge.findAll()
+    Theme.findAll()
         .then(data => {
             res.status(200).json(data);
         })
         .catch(err => {
             res.status(500).json({
                 message:
-                    err.message || "Some error occurred while retrieving badges."
+                    err.message || "Some error occurred while retrieving themes."
             });
         });
 };
 
 exports.create = (req, res) => {
 
-    Badge.create(req.body)
+    Theme.create(req.body)
         .then(data => {
-            res.status(201).json({ message: "New Badge created.", location: "/badge/" + data.id });
+            res.status(201).json({ message: "New Theme created.", location: "/theme/" + data.id });
         })
         .catch(err => {
             if (err.name === 'SequelizeValidationError')
                 res.status(400).json({ message: err.errors[0].message });
             else
                 res.status(500).json({
-                    message: err.message || "Some error occurred while creating the Badge."
+                    message: err.message || "Some error occurred while creating the Theme."
                 });
         });
 }
 
-// Display list of all users for a given badge (with badge info)
+// Display list of all users for a given theme (with theme info)
 exports.getUsers = (req, res) => {
-    // console.log(req.params.badgeID)
-    Badge.findByPk(req.params.badgeID,
+    // console.log(req.params.themeID)
+    Theme.findByPk(req.params.themeID,
         {
             include: {
                 model: User,
@@ -47,21 +47,21 @@ exports.getUsers = (req, res) => {
         .then(data => {
             if (data === null)
                 res.status(404).json({
-                    message: `Not found Badge with id ${req.params.badgeID}.`
+                    message: `Not found Theme with id ${req.params.themeID}.`
                 });
             else
                 res.status(200).json(data);
         })
         .catch(err => {
             res.status(500).json({
-                message: `Error retrieving Users for Badge with id ${req.params.badgeID}.`
+                message: `Error retrieving Users for Theme with id ${req.params.themeID}.`
             });
         });
 };
 
 
-// Add one badge to one user
-exports.assignBadge = (req, res) => {
+// Add one theme to one user
+exports.assignTheme = (req, res) => {
     User.findByPk(req.params.userID)
         .then(user => {
             // no data returned means there is no user in DB with that given ID 
@@ -70,46 +70,37 @@ exports.assignBadge = (req, res) => {
                     message: `Not found User with id ${req.params.userID}.`
                 });
             else {
-                Badge.findByPk(req.params.badgeID)
-                    .then(badge => {
-                        if (badge === null)
+                Theme.findByPk(req.params.themeID)
+                    .then(theme => {
+                        if (theme === null)
                             res.status(404).json({
-                                message: `Not found Badge with id ${req.params.badgeID}.`
+                                message: `Not found Theme with id ${req.params.themeID}.`
                             });
                         else {
-                            badge.addUser(user)
+                            theme.addUser(user)
                                 .then(data => {
                                     if (data === undefined)
                                         res.status(200).json({
-                                            message: `Badge ${req.params.badgeID} was already assigned to User ${req.params.userID}.`
+                                            message: `Theme ${req.params.themeID} was already assigned to User ${req.params.userID}.`
                                         });
-                                    else {
-                                        user.points += badge.points;
-                                        user.save().then(() => {
-                                            res.status(200).json({
-                                                message: `Added Badge ${req.params.badgeID} to User ${req.params.userID}. (+${badge.points} points)`
-                                            }).then(() => {
-
-                                            })
-                                        })
-
-
-
-                                    }
+                                    else
+                                        res.status(200).json({
+                                            message: `Added Theme ${req.params.themeID} to User ${req.params.userID}.`
+                                        });
                                 })
                         }
                     })
-                    .catch(err => {
-                        res.status(500).json({
-                            message: err.message || `Error adding Badge ${req.params.badgeID} to User ${req.params.userID}.`
-                        });
-                    });
             }
         })
+        .catch(err => {
+            res.status(500).json({
+                message: err.message || `Error adding Theme ${req.params.themeID} to User ${req.params.userID}.`
+            });
+        });
 };
 
-// Remove one badge from one user
-exports.unassignBadge = async (req, res) => {
+// Remove one theme from one user
+exports.unassignTheme = async (req, res) => {
     try {
         let user = await User.findByPk(req.params.userID)
 
@@ -121,49 +112,49 @@ exports.unassignBadge = async (req, res) => {
             return;
         }
 
-        let badge = await Badge.findByPk(req.params.badgeID)
+        let theme = await Theme.findByPk(req.params.themeID)
 
-        // no data returned means there is no badge in DB with that given ID 
-        if (badge === null) {
+        // no data returned means there is no theme in DB with that given ID 
+        if (theme === null) {
             res.status(404).json({
-                message: `Not found Badge with id ${req.params.badgeID}.`
+                message: `Not found Theme with id ${req.params.themeID}.`
             });
             return;
         }
 
-        let data = await badge.removeUser(user)
+        let data = await theme.removeUser(user)
 
         // console.log(data);
         if (data === 1)
             res.status(200).json({
-                message: `Removed Badge ${req.params.badgeID} to User ${req.params.userID}.`
+                message: `Removed Theme ${req.params.themeID} to User ${req.params.userID}.`
             });
         else
             res.status(200).json({
-                message: `No Badge ${req.params.badgeID} associated to User ${req.params.userID}.`
+                message: `No Theme ${req.params.themeID} associated to User ${req.params.userID}.`
             });
     }
     catch (err) {
         res.status(500).json({
-            message: err.message || `Error adding Badge ${req.params.badgeID} to User ${req.params.userID}.`
+            message: err.message || `Error adding Theme ${req.params.themeID} to User ${req.params.userID}.`
         })
     };
 };
 
 exports.findOne = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
-    Badge.findByPk(req.params.badgeID)
+    Theme.findByPk(req.params.themeID)
         .then(data => {
             if (data === null)
                 res.status(404).json({
-                    message: `Not found Badge with id ${req.params.badgeID}.`
+                    message: `Not found Theme with id ${req.params.themeID}.`
                 });
             else
                 res.json(data);
         })
         .catch(err => {
             res.status(500).json({
-                message: `Error retrieving Badge with id ${req.params.badgeID}.`
+                message: `Error retrieving Theme with id ${req.params.themeID}.`
             });
         });
 };
@@ -171,35 +162,35 @@ exports.findOne = (req, res) => {
 
 exports.delete = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
-    Badge.destroy({
+    Theme.destroy({
         where: {
-            id: req.params.badgeID
+            id: req.params.themeID
         }
     })
         .then(function (rowDeleted) { // rowDeleted will return number of rows deleted
             if (rowDeleted === 1) {
                 res.status(200).json({
-                    message: `Deleted badge with id ${req.params.badgeID}.`
+                    message: `Deleted theme with id ${req.params.themeID}.`
                 });
             } else {
                 res.status(404).json({
-                    message: `Badge with id ${req.params.badgeID} not found.`
+                    message: `Theme with id ${req.params.themeID} not found.`
                 });
             }
         }, function (err) {
             res.status(500).json({
-                message: err.message || "Some error occurred while creating the Badge."
+                message: err.message || "Some error occurred while creating the Theme."
             });
         });
 };
 
 exports.update = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
-    Badge.findByPk(req.params.badgeID)
+    Theme.findByPk(req.params.themeID)
         .then(data => {
             if (data === null)
                 res.status(404).json({
-                    message: `Not found Badge with id ${req.params.badgeID}.`
+                    message: `Not found Theme with id ${req.params.themeID}.`
                 });
             else
                 if (!req.body.Description) {
@@ -211,12 +202,12 @@ exports.update = (req, res) => {
             data.Description = req.body.Description;
             data.save();
             res.status(200).json({
-                message: `Updated Badge with id ${req.params.badgeID}.`
+                message: `Updated Theme with id ${req.params.themeID}.`
             });
         })
         .catch(err => {
             res.status(500).json({
-                message: `${err.message} Error retrieving Badge with id ${req.params.badgeID}.`
+                message: `${err.message} Error retrieving Theme with id ${req.params.themeID}.`
             });
         });
 };

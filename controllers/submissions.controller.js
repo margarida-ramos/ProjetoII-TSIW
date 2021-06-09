@@ -3,6 +3,7 @@ const Submission = db.submission;
 
 //necessary for LIKE operator
 const { Op } = require('sequelize');
+const { activity } = require("../models/index.js");
 
 // calculates limit and offset parameters for Sequelize Model method findAndCountAll(), 
 // from API request query parameters: page and size
@@ -59,11 +60,28 @@ exports.findAll = (req, res) => {
         });
 };
 
-exports.create = (req, res) => {
+exports.submit = (req, res) => {
 
     Submission.create(req.body)
-        .then(data => {
-            res.status(201).json({ message: "New Submission created.", location: "/submission/" + data.id });
+        .then(submission => {
+
+            User.findByPk(submission.userId)
+                .then(user => {
+
+                    Activity.findByPk(submission.activityId)
+                        .then(activity => {
+
+                            user.points += activity.points;
+                            user.coins += activity.coins;
+                            user.save().then(() => {
+
+                                res.status(201).json({ message: "New Submission created.", location: "/submission/" + submission.id });
+                            })
+
+                        })
+                })
+
+
         })
         .catch(err => {
             if (err.name === 'SequelizeValidationError')

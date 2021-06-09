@@ -11,19 +11,16 @@ module.exports = (sequelize, DataTypes) => {
             validate: { notEmpty: { msg: "Message can not be empty!" } }
         },
         Link: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: { notEmpty: { msg: "Link can not be empty!" } }
+            type: DataTypes.STRING
         },
         Date: {
             type: DataTypes.DATE,
             allowNull: false,
-            validate: { notEmpty: { msg: "Date can not be empty!" } }
+            defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
         },
         Read: {
             type: DataTypes.BOOLEAN,
-            allowNull: false,
-            validate: { notEmpty: { msg: "Read can not be empty!" } }
+            defaultValue: false
         }
     }, {
         timestamps: false

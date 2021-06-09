@@ -1,8 +1,8 @@
 const express = require('express');
 let router = express.Router();
-const submissionController = require('../controllers/submissions.controller.js');
+const activitytypeController = require('../controllers/activitytypes.controller.js');
 
-// middleware for all routes related with submissions
+// middleware for all routes related with activitytypes
 router.use((req, res, next) => {
     const start = Date.now();
     res.on("finish", () => { //finish event is emitted once the response is sent to the client
@@ -13,16 +13,16 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(submissionController.findAll)
-    .post(submissionController.submit);
+    .get(activitytypeController.findAll)
+    .post(activitytypeController.create);
 
-router.route('/:submissionID')
-    .get(submissionController.findOne)
-    .delete(submissionController.delete)
-    .put(submissionController.update);
+router.route('/:activitytypeID')
+    .get(activitytypeController.findOne)
+    .delete(activitytypeController.delete)
+    .put(activitytypeController.update);
 
 router.all('*', function (req, res) {
-    res.status(404).json({ message: 'SUBMISSIONS: what???' });
+    res.status(404).json({ message: 'ACTIVITYTYPES: what???' });
 })
 
 // EXPORT ROUTES (required by APP)

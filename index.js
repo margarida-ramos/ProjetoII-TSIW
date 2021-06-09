@@ -17,6 +17,7 @@ app.get('/', function (req, res) {
 // routing middleware for resources
 app.use('/auth', require('./routes/auth.routes.js'))
 app.use('/activities', require('./routes/activities.routes.js'))
+app.use('/activitytypes', require('./routes/activitytypes.routes.js'))
 app.use('/courses', require('./routes/courses.routes.js'))
 app.use('/roles', require('./routes/roles.routes.js'))
 app.use('/classes', require('./routes/classes.routes.js'))
@@ -26,6 +27,7 @@ app.use('/notifications', require('./routes/notifications.routes.js'))
 app.use('/questions', require('./routes/questions.routes.js'))
 app.use('/submissions', require('./routes/submissions.routes.js'))
 app.use('/users', require('./routes/users.routes.js'))
+app.use('/themes', require('./routes/themes.routes.js'))
 
 // handle invalid routes
 app.get('*', function (req, res) {

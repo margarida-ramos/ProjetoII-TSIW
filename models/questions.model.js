@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
             validate: { notEmpty: { msg: "Answers can not be empty!" } }
         },
         RightAnswers: {
-            type: DataTypes.DATE,
+            type: DataTypes.STRING,
             allowNull: false,
             validate: { notEmpty: { msg: "RightAnswers can not be empty!" } }
         },

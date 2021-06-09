@@ -17,8 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         Date: {
             type: DataTypes.DATE,
-            allowNull: false,
-            validate: { notEmpty: { msg: "Date can not be empty!" } }
+            defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
         },
         Read: {
             type: DataTypes.BOOLEAN,

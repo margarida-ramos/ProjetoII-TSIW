@@ -36,10 +36,19 @@ db.badge = require("./badges.model.js")(sequelize, DataTypes);
 db.notification = require("./notifications.model.js")(sequelize, DataTypes);
 db.submission = require("./submissions.model.js")(sequelize, DataTypes);
 db.question = require("./questions.model.js")(sequelize, DataTypes);
+db.theme = require("./themes.model.js")(sequelize, DataTypes);
+db.activitytype = require("./activitytypes.model.js")(sequelize, DataTypes);
 
 //define the User-Badge m:n relationship
 db.badge.belongsToMany(db.user, { through: 'userbadges' });
-db.user.belongsToMany(db.badge, { through: 'userbadges' });
+db.user.belongsToMany(db.badge, { through: 'userbadges', foreignKey: 'Username'  });
+
+//define the User-Badge m:n relationship
+db.theme.belongsToMany(db.user, { through: 'userthemes'});
+db.user.belongsToMany(db.theme, { through: 'userthemes', foreignKey: 'Username' });
+
+db.activitytype.hasMany(db.activity);
+db.activity.belongsTo(db.activitytype);
 
 //define 1:N relationships
 db.course.hasMany(db.activity);
@@ -48,14 +57,12 @@ db.activity.belongsTo(db.course);
 db.class.hasMany(db.activity);
 db.activity.belongsTo(db.class);
 
-db.user.hasMany(db.history);
-db.history.belongsTo(db.user);
+db.user.hasMany(db.history, {foreignKey: 'Username'});
 
 db.history.belongsTo(db.activity);
 db.activity.hasMany(db.history);
 
-db.user.hasMany(db.notification);
-db.notification.belongsTo(db.user);
+db.user.hasMany(db.notification, {foreignKey: 'Username'});
 
 db.activity.hasMany(db.question);
 db.question.belongsTo(db.activity);
@@ -63,23 +70,15 @@ db.question.belongsTo(db.activity);
 db.submission.hasMany(db.question);
 db.question.belongsTo(db.submission);
 
-db.user.hasMany(db.submission);
-db.submission.belongsTo(db.user);
+db.user.hasMany(db.submission, {foreignKey: 'Username'});
 
 db.course.hasMany(db.user);
-db.user.belongsTo(db.course);
 
 db.role.hasMany(db.user);
-db.user.belongsTo(db.role);
-/*
-db.user.belongsTo(db.role,
-    {
-        foreignKey: 'RoleID'
-    });
-*/
+
+db.theme.hasOne(db.user, {foreignKey: 'SelectedTheme', constraints: false}); // constraints false para evitar colisão com a relação userthemes
 
 
-/*
 db.sequelize.sync({ force: true })
 .then(() => {
     console.log('DB is successfully synchronized')
@@ -87,6 +86,6 @@ db.sequelize.sync({ force: true })
 .catch(e => {
     console.log(e)
 }); 
-*/
+
 
 module.exports = db;

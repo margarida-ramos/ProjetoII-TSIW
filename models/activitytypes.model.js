@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const History = sequelize.define("history", {
+    const Activitytype = sequelize.define("activitytype", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -8,14 +8,10 @@ module.exports = (sequelize, DataTypes) => {
         Description: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notEmpty: { msg: "Description can not be empty!" } }
-        },
-        Date: {
-            type: DataTypes.DATE,
-            defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+            validate: { notEmpty: { msg: "Title can not be empty!" } }
         }
     }, {
         timestamps: false
     });
-    return History;
+    return Activitytype;
 };

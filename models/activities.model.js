@@ -11,7 +11,16 @@ module.exports = (sequelize, DataTypes) => {
             validate: { notEmpty: { msg: "Title can not be empty!" } }
         },
         Level: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
+        Points: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
+        Coins: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
         }
     }, {
         timestamps: false

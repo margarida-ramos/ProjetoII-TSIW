@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const Badge = sequelize.define("badge", {
+    const Theme = sequelize.define("theme", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -22,17 +22,9 @@ module.exports = (sequelize, DataTypes) => {
         },
         ImageURI: {
             type: DataTypes.STRING
-        },
-        Points: {
-            type: DataTypes.INTEGER,
-            defaultValue: 0
-        },
-        Coins: {
-            type: DataTypes.INTEGER,
-            defaultValue: 0
         }
     }, {
-        timestamps: true
+        timestamps: false
     });
-    return Badge;
+    return Theme;
 };
