@@ -122,6 +122,12 @@ exports.update = (req, res) => {
             data.BirthDate = req.body.BirthDate;
             data.Username = req.body.Username;
             data.Password = req.body.Password;
+            data.courseId = req.body.courseId;
+            data.roleId = req.body.roleId;
+            data.SelectedTheme = req.body.SelectedTheme;
+            data.ProfilePicURI = req.body.ProfilePicURI;
+            data.BirthDate = req.body.BirthDate;
+            data.ProfilePicURI = req.body.ProfilePicURI;
 
             data.save();
             res.status(200).json({

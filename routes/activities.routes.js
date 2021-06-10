@@ -17,7 +17,7 @@ router.route('/')
     .get(authController.verifyToken, authController.isAdmin, activityController.findAll)
     .post(authController.verifyToken, authController.isAdmin, activityController.create);
 
-router.route('/user')
+router.route('/user/:username')
     .get(authController.verifyToken, authController.isAdmin, activityController.findByUser)
 
 router.route('/:activityID')

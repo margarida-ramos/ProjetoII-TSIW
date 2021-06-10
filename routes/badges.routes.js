@@ -23,7 +23,7 @@ router.route('/:badgeID')
     .delete(authController.verifyToken, authController.isAdmin, badgeController.delete)
     .put(authController.verifyToken, authController.isAdmin, badgeController.update);
 
-router.route('/:badgeID/user/:userID')
+router.route('/:badgeID/user/:username')
     .post(authController.verifyToken, authController.isAdminOrLoggedUser, badgeController.assignBadge)
     .delete(authController.verifyToken, authController.isAdmin, badgeController.unassignBadge);
 

@@ -17,6 +17,12 @@ router.route('/')
     .get(authController.verifyToken, authController.isAdmin, submissionController.findAll)
     .post(authController.verifyToken, authController.isAdminOrLoggedUser, submissionController.submit);
 
+router.route('/user/:username')
+    .get(authController.verifyToken, authController.isAdmin, submissionController.findByUser)
+
+router.route('/activity/:activityID')
+    .get(authController.verifyToken, authController.isAdmin, submissionController.findByActivity)
+
 router.route('/:submissionID')
     .get(authController.verifyToken, authController.isAdmin, submissionController.findOne)
     .delete(authController.verifyToken, authController.isAdmin, submissionController.delete);

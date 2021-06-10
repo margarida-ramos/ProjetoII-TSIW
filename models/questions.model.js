@@ -21,9 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             validate: { notEmpty: { msg: "RightAnswers can not be empty!" } }
         },
         ImageURI: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            validate: { notEmpty: { msg: "ImageURI can not be empty!" } }
+            type: DataTypes.STRING
         }
     }, {
         timestamps: false

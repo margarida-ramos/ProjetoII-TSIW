@@ -1,13 +1,14 @@
 const db = require("../models/index.js");
+const list = require("./list");
 const Notification = db.notification;
 
-exports.findAll = (req, res) => {
+exports.findByUser = (req, res) => {
     
     list.procedure(req.query)
     let limit = list.limit;
     let offset = list.offset;
 
-    Notification.findAndCountAll({ where: list.condition, limit, offset })
+    Notification.findAndCountAll({ where: {username: req.params.username}, limit, offset })
         .then(data => {
             // convert response data into custom format
             const response = list.getPagingData(data, offset, limit);
@@ -37,7 +38,6 @@ exports.create = (req, res) => {
         });
 }
 
-// List just one notification
 exports.findOne = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
     Notification.findByPk(req.params.notificationID)
@@ -91,17 +91,13 @@ exports.read = (req, res) => {
                     message: `Not found Notification with id ${req.params.notificationID}.`
                 });
             else
-                if (!req.body.Description) {
-                    res.status(400).json({
-                        message: `Error - Data fields are null!`
-                    });
-                }
-
-            data.Read = true;
-            data.save();
-            res.status(200).json({
-                message: `Read Notification ${req.params.notificationID}.`
-            });
+            {   
+                data.Read = true;
+                data.save();
+                res.status(200).json({
+                    message: `Read Notification ${req.params.notificationID}.`
+                });
+            }
         })
         .catch(err => {
             res.status(500).json({
@@ -110,36 +106,3 @@ exports.read = (req, res) => {
         });
 };
 
-
-/*
-
-// List just one notification
-exports.update = (req, res) => {
-    // obtains only a single entry from the table, using the provided primary key
-    Notification.update(req.body,
-
-    {
-        where: {
-            id: req.params.notificationID
-        }
-    })
-    .then(function(rowUpdated){
-        if(rowUpdated === 1){
-            res.status(200).json({
-                message: `Updated notification with id ${req.params.notificationID}.`
-            });
-         }
-         else
-         {
-            res.status(500).json({
-                message: err.message || "Some error occurred while creating the Notification."
-            });
-         }
-      }, function(err){
-        res.status(500).json({
-            message: err.message || "Some error occurred while creating the Notification."
-        });
-      });
-};
-
-*/

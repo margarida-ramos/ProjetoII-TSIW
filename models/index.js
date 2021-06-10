@@ -73,8 +73,8 @@ db.user.hasMany(db.notification, {foreignKey: 'Username'});
 db.activity.hasMany(db.question);
 db.question.belongsTo(db.activity);
 
-db.submission.hasMany(db.question);
-db.question.belongsTo(db.submission);
+db.activity.hasMany(db.submission);
+db.submission.belongsTo(db.activity);
 
 db.user.hasMany(db.submission, {foreignKey: 'Username'});
 
@@ -85,8 +85,9 @@ db.user.belongsTo(db.role);
 
 db.theme.hasOne(db.user, {foreignKey: 'SelectedTheme', constraints: false}); // constraints false para evitar colisão com a relação userthemes
 
-/*
 
+
+/*
 db.sequelize.sync({ force: false })
 .then(() => {
     console.log('DB is successfully synchronized')

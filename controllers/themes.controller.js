@@ -229,8 +229,13 @@ exports.update = (req, res) => {
                     });
                 }
 
+            data.Title = req.body.Title;
             data.Description = req.body.Description;
+            data.Shaders = req.body.Shaders;
+            data.ImageURI = req.body.ImageURI;
+            data.Price = req.body.Price;
             data.save();
+
             res.status(200).json({
                 message: `Updated Theme with id ${req.params.themeID}.`
             });

@@ -1,5 +1,5 @@
 const db = require("../models/index.js");
-const History = db.history;
+const Log = db.log;
 const list = require("./list");
 
 exports.findAll = (req, res) => {
@@ -8,7 +8,7 @@ exports.findAll = (req, res) => {
     let limit = list.limit;
     let offset = list.offset;
 
-    History.findAndCountAll({ where: list.condition, limit, offset })
+    Log.findAndCountAll({ where: list.condition, limit, offset })
         .then(data => {
             // convert response data into custom format
             const response = list.getPagingData(data, offset, limit);
@@ -17,80 +17,80 @@ exports.findAll = (req, res) => {
         .catch(err => {
             res.status(500).json({
                 message:
-                    err.message || "Some error occurred while retrieving histories."
+                    err.message || "Some error occurred while retrieving logs."
             });
         });
 };
 
 exports.create = (req, res) => {
 
-    History.create(req.body)
+    Log.create(req.body)
         .then(data => {
-            res.status(201).json({ message: "New History created.", location: "/history/" + data.id });
+            res.status(201).json({ message: "New Log created.", location: "/log/" + data.id });
         })
         .catch(err => {
             if (err.name === 'SequelizeValidationError')
                 res.status(400).json({ message: err.errors[0].message });
             else
                 res.status(500).json({
-                    message: err.message || "Some error occurred while creating the History."
+                    message: err.message || "Some error occurred while creating the Log."
                 });
         });
 }
 
-// List just one history
+// List just one log
 exports.findOne = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
-    History.findByPk(req.params.historyID)
+    Log.findByPk(req.params.logID)
         .then(data => {
             if (data === null)
                 res.status(404).json({
-                    message: `Not found History with id ${req.params.historyID}.`
+                    message: `Not found Log with id ${req.params.logID}.`
                 });
             else
                 res.json(data);
         })
         .catch(err => {
             res.status(500).json({
-                message: `Error retrieving History with id ${req.params.historyID}.`
+                message: `Error retrieving Log with id ${req.params.logID}.`
             });
         });
 };
 
 
-// List just one history
+// List just one log
 exports.delete = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
-    History.destroy({
+    Log.destroy({
         where: {
-            id: req.params.historyID
+            id: req.params.logID
         }
     })
         .then(function (rowDeleted) { // rowDeleted will return number of rows deleted
             if (rowDeleted === 1) {
                 res.status(200).json({
-                    message: `Deleted history with id ${req.params.historyID}.`
+                    message: `Deleted log with id ${req.params.logID}.`
                 });
             } else {
                 res.status(404).json({
-                    message: `History with id ${req.params.historyID} not found.`
+                    message: `Log with id ${req.params.logID} not found.`
                 });
             }
 
         }, function (err) {
             res.status(500).json({
-                message: err.message || "Some error occurred while creating the History."
+                message: err.message || "Some error occurred while creating the Log."
             });
         });
 };
 
 exports.update = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
-    History.findByPk(req.params.historyID)
+    Log.findByPk(req.params.logID)
         .then(data => {
             if (data === null)
                 res.status(404).json({
-                    message: `Not found History with id ${req.params.historyID}.`
+                    message: `Not found Log with id ${req.params.logID}.`
                 });
             else
                 if (!req.body.Description) {
@@ -102,12 +102,12 @@ exports.update = (req, res) => {
             data.Description = req.body.Description;
             data.save();
             res.status(200).json({
-                message: `Updated History with id ${req.params.historyID}.`
+                message: `Updated Log with id ${req.params.logID}.`
             });
         })
         .catch(err => {
             res.status(500).json({
-                message: `${err.message} Error retrieving History with id ${req.params.historyID}.`
+                message: `${err.message} Error retrieving Log with id ${req.params.logID}.`
             });
         });
 };
@@ -115,31 +115,31 @@ exports.update = (req, res) => {
 
 /*
 
-// List just one history
+// List just one log
 exports.update = (req, res) => {
     // obtains only a single entry from the table, using the provided primary key
-    History.update(req.body,
+    Log.update(req.body,
 
     {
         where: {
-            id: req.params.historyID
+            id: req.params.logID
         }
     })
     .then(function(rowUpdated){
         if(rowUpdated === 1){
             res.status(200).json({
-                message: `Updated history with id ${req.params.historyID}.`
+                message: `Updated log with id ${req.params.logID}.`
             });
          }
          else
          {
             res.status(500).json({
-                message: err.message || "Some error occurred while creating the History."
+                message: err.message || "Some error occurred while creating the Log."
             });
          }
       }, function(err){
         res.status(500).json({
-            message: err.message || "Some error occurred while creating the History."
+            message: err.message || "Some error occurred while creating the Log."
         });
       });
 };

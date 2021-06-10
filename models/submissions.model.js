@@ -5,22 +5,15 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true,
         },
-        Message: {
+        Report: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: { notEmpty: { msg: "Message can not be empty!" } }
-        },
-        Link: {
-            type: DataTypes.STRING
         },
         Date: {
             type: DataTypes.DATE,
             allowNull: false,
             defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
-        },
-        Read: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false
         }
     }, {
         timestamps: false

@@ -23,7 +23,7 @@ router.route('/:themeID')
     .delete(authController.verifyToken, authController.isAdmin, themeController.delete)
     .put(authController.verifyToken, authController.isAdmin, themeController.update);
 
-router.route('/:themeID/user/:userID')
+router.route('/:themeID/user/:username')
     .put(authController.verifyToken, authController.isAdminOrLoggedUser, themeController.selectTheme)
     .delete(authController.verifyToken, authController.isAdmin, themeController.unassignTheme);
 

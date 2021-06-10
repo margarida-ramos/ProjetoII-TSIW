@@ -6,7 +6,7 @@ const { Op } = require('sequelize');
 const list = require("./list");
 
 exports.findAll = (req, res) => {
-    
+
     list.procedure(req.query)
     let limit = list.limit;
     let offset = list.offset;
@@ -60,6 +60,24 @@ exports.findOne = (req, res) => {
         });
 };
 
+exports.findByActivity = (req, res) => {
+
+    Question.findAll({
+        where: {
+            activityId: req.params.activityID
+        }
+    }).then(data => {
+        res.status(200).json(data);
+    }).catch(err => {
+        res.status(500).json({
+            message:
+                err.message || "Some error occurred while retrieving questions."
+        });
+    });
+};
+
+
+
 
 // List just one question
 exports.delete = (req, res) => {
@@ -94,18 +112,19 @@ exports.update = (req, res) => {
                 res.status(404).json({
                     message: `Not found Question with id ${req.params.questionID}.`
                 });
-            else
-                if (!req.body.Description) {
-                    res.status(400).json({
-                        message: `Error - Data fields are null!`
-                    });
-                }
+            else {
 
-            data.Description = req.body.Description;
-            data.save();
-            res.status(200).json({
-                message: `Updated Question with id ${req.params.questionID}.`
-            });
+
+                data.Question = req.body.Question;
+                data.Answers = req.body.Answers;
+                data.RightAnswers = req.body.RightAnswers;
+                data.ImageURI = req.body.ImageURI;
+                data.activityId = req.body.activityId;
+                data.save();
+                res.status(200).json({
+                    message: `Updated Question with id ${req.params.questionID}.`
+                });
+            }
         })
         .catch(err => {
             res.status(500).json({

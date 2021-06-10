@@ -17,8 +17,12 @@ router.route('/')
     .get(authController.verifyToken, authController.isAdmin, questionController.findAll)
     .post(authController.verifyToken, authController.isAdmin, questionController.create);
 
+
+router.route('/activity/:activityID')
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, questionController.findByActivity)
+
 router.route('/:questionID')
-    .get(authController.verifyToken, authController.isAdminOrLoggedUser, questionController.findOne)
+    .get(authController.verifyToken, authController.isAdmin, questionController.findOne)
     .delete(authController.verifyToken, authController.isAdmin, questionController.delete)
     .put(authController.verifyToken, authController.isAdmin, questionController.update);
 

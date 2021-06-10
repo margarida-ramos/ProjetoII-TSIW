@@ -157,6 +157,11 @@ exports.update = (req, res) => {
 
             data.Title = req.body.Title;
             data.Level = req.body.Level;
+            data.Coins = req.body.Coins;
+            data.Points = req.body.Points;
+            data.activitytypeId = req.body.activitytypeId;
+            data.courseId = req.body.courseId;
+            data.classId = req.body.classId;
             data.save();
             res.status(200).json({
                 message: `Updated Activity with id ${req.params.activityID}.`

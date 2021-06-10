@@ -1,12 +1,14 @@
 const db = require("../models/index.js");
 const Submission = db.submission;
+const User = db.user;
+const Activity = db.activity;
 
 const { activity } = require("../models/index.js");
 const list = require("./list");
 
 
 exports.findAll = (req, res) => {
-    
+
     list.procedure(req.query)
     let limit = list.limit;
     let offset = list.offset;
@@ -30,20 +32,32 @@ exports.submit = (req, res) => {
     Submission.create(req.body)
         .then(submission => {
 
-            User.findByPk(submission.userId)
+            User.findByPk(req.body.Username)
                 .then(user => {
 
-                    Activity.findByPk(submission.activityId)
-                        .then(activity => {
+                    if (!user)
+                    {
+                        res.status(201).json({ message: "Not Found User with Username " + req.body.Username});
+                    }
+    
+                    console.log(req.body.activityId);
+                    Activity.findByPk(req.body.activityId)
+                    .then(activity => {
 
-                            user.points += activity.points;
-                            user.coins += activity.coins;
-                            user.save().then(() => {
-
-                                res.status(201).json({ message: "New Submission created.", location: "/submission/" + submission.id });
-                            })
-
+                        if (!activity)
+                        {
+                            res.status(201).json({ message: "Not Found Activity with ID " + req.body.activityId});
+                        }
+    
+                        user.points += activity.points;
+                        user.coins += activity.coins;
+                        user.save().then(() => {
+    
+                            res.status(201).json({ message: "New Submission created.", location: "/submission/" + submission.id });
                         })
+    
+                    })
+    
                 })
 
 
@@ -57,6 +71,38 @@ exports.submit = (req, res) => {
                 });
         });
 }
+
+exports.findByActivity = (req, res) => {
+
+    Submission.findAll({
+        where: {
+            activityId: req.params.activityID
+        }
+    }).then(data => {
+        res.status(200).json(data);
+    }).catch(err => {
+        res.status(500).json({
+            message:
+                err.message || "Some error occurred while retrieving submissions."
+        });
+    });
+};
+
+exports.findByUser = (req, res) => {
+
+    Submission.findAll({
+        where: {
+            username: req.params.username
+        }
+    }).then(data => {
+        res.status(200).json(data);
+    }).catch(err => {
+        res.status(500).json({
+            message:
+                err.message || "Some error occurred while retrieving submissions."
+        });
+    });
+};
 
 // List just one submission
 exports.findOne = (req, res) => {

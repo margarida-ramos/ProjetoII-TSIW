@@ -15,6 +15,7 @@ router.use((req, res, next) => {
 
 router.route('/')
     .get(authController.verifyToken, authController.isAdmin, logController.findAll)
+    .post(authController.verifyToken, authController.isAdminOrLoggedUser, logController.create)
 
 router.route('/:logID')
     .get(authController.verifyToken, authController.isAdmin, logController.findOne)

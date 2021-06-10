@@ -13,9 +13,9 @@ router.use((req, res, next) => {
     next()
 })
 
-router.route('/:badgeID/user/:userID')
+router.route('/user/:username')
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, notificationController.findByUser)
     .post(authController.verifyToken, authController.isAdminOrLoggedUser, notificationController.create)
-    .delete(authController.verifyToken, authController.isAdminOrLoggedUser, notificationController.delete);
 
 router.route('/:notificationID')
     .get(authController.verifyToken, authController.isAdminOrLoggedUser, notificationController.findOne)

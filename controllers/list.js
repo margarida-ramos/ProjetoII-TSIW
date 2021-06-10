@@ -45,24 +45,3 @@ exports.procedure = (query) => {
     return { condition, limit, offset }
 
 }
-
-
-
-/*
-exports.findAll = (req, res) => {
-
-
-    Submission.findAndCountAll({ where: condition, limit, offset })
-        .then(data => {
-            // convert response data into custom format
-            const response = getPagingData(data, offset, limit);
-            res.status(200).json(response);
-        })
-        .catch(err => {
-            res.status(500).json({
-                message:
-                    err.message || "Some error occurred while retrieving submissions."
-            });
-        });
-};
-*/
