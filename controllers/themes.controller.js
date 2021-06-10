@@ -61,7 +61,7 @@ exports.getUsers = (req, res) => {
 
 
 // Add one theme to one user
-exports.assignTheme = (req, res) => {
+exports.unlockTheme = (req, res) => {
     User.findByPk(req.params.userID)
         .then(user => {
             // no data returned means there is no user in DB with that given ID 
@@ -81,15 +81,45 @@ exports.assignTheme = (req, res) => {
                                 .then(data => {
                                     if (data === undefined)
                                         res.status(200).json({
-                                            message: `Theme ${req.params.themeID} was already assigned to User ${req.params.userID}.`
+                                            message: `Theme ${req.params.themeID} was already unlocked to User ${req.params.userID}.`
                                         });
-                                    else
-                                        res.status(200).json({
-                                            message: `Added Theme ${req.params.themeID} to User ${req.params.userID}.`
-                                        });
+                                    else {
+                                        user.coins -= theme.coins;
+                                        user.save().then(() => {
+                                            res.status(200).json({
+                                                message: `Added Theme ${req.params.themeID} to User ${req.params.userID}.`
+                                            });
+                                        })
+                                    }
                                 })
                         }
                     })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: err.message || `Error adding Theme ${req.params.themeID} to User ${req.params.userID}.`
+            });
+        });
+};
+
+
+// Add one theme to one user
+exports.selectTheme = (req, res) => {
+    User.findByPk(req.params.userID)
+        .then(user => {
+            // no data returned means there is no user in DB with that given ID 
+            if (user === null)
+                res.status(404).json({
+                    message: `Not found User with id ${req.params.userID}.`
+                });
+            else {
+                user.selectTheme = req.params.themeID;
+                user.save().then(() => {
+                    res.status(200).json({
+                        message: `Selected Theme ${req.params.themeID} for User ${req.params.userID}.`
+                    });
+                })
             }
         })
         .catch(err => {

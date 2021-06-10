@@ -26,10 +26,12 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING
         },
         Points: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            defaultValue: 0
         },
         Coins: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            defaultValue: 0
         }
     }, {
         timestamps: false

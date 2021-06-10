@@ -1,9 +1,9 @@
 const express = require('express');
 let router = express.Router();
-const submissionController = require('../controllers/submissions.controller.js');
+const logController = require('../controllers/logs.controller.js');
 const authController = require("../controllers/auth.controller");
 
-// middleware for all routes related with submissions
+// middleware for all routes related with logs
 router.use((req, res, next) => {
     const start = Date.now();
     res.on("finish", () => { //finish event is emitted once the response is sent to the client
@@ -14,15 +14,15 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(authController.verifyToken, authController.isAdmin, submissionController.findAll)
-    .post(authController.verifyToken, authController.isAdminOrLoggedUser, submissionController.submit);
+    .get(authController.verifyToken, authController.isAdmin, logController.findAll)
 
-router.route('/:submissionID')
-    .get(authController.verifyToken, authController.isAdmin, submissionController.findOne)
-    .delete(authController.verifyToken, authController.isAdmin, submissionController.delete);
+router.route('/:logID')
+    .get(authController.verifyToken, authController.isAdmin, logController.findOne)
+    .delete(authController.verifyToken, authController.isAdmin, logController.delete)
+    .put(authController.verifyToken, authController.isAdmin, logController.update);
 
 router.all('*', function (req, res) {
-    res.status(404).json({ message: 'SUBMISSIONS: Not Found.' });
+    res.status(404).json({ message: 'LOGS: what???' });
 })
 
 // EXPORT ROUTES (required by APP)

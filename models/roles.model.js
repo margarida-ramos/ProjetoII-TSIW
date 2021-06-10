@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true,
         },
-        Description: {
+        name: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: { notEmpty: { msg: "Title can not be empty!" } }

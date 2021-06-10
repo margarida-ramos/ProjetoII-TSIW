@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const History = sequelize.define("history", {
+    const Log = sequelize.define("log", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -17,5 +17,5 @@ module.exports = (sequelize, DataTypes) => {
     }, {
         timestamps: false
     });
-    return History;
+    return Log;
 };

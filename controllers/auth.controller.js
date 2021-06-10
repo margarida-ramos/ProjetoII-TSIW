@@ -62,6 +62,7 @@ exports.isAdmin = async (req, res, next) => {
         message: "Require Admin Role!"
     });
 };
+
 exports.isAdminOrLoggedUser = async (req, res, next) => {
     let user = await User.findByPk(req.loggedUserId);
     let role = await user.getRole();

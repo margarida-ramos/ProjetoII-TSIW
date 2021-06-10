@@ -15,13 +15,17 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             validate: { notEmpty: { msg: "Description can not be empty!" } }
         },
-        Requirement: {
+        Shaders: {
             type: DataTypes.STRING,
             allowNull: false,
-            validate: { notEmpty: { msg: "Requirement can not be empty!" } }
+            validate: { notEmpty: { msg: "Shaders can not be empty!" } }
         },
         ImageURI: {
             type: DataTypes.STRING
+        },
+        Price: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
         }
     }, {
         timestamps: false

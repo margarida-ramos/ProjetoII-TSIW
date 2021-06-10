@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const courseController = require('../controllers/courses.controller.js');
+const authController = require("../controllers/auth.controller");
 
 // middleware for all routes related with courses
 router.use((req, res, next) => {
@@ -13,13 +14,13 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(courseController.findAll)
-    .post(courseController.create);
+    .get(authController.verifyToken, authController.isAdmin, courseController.findAll)
+    .post(authController.verifyToken, authController.isAdmin, courseController.create);
 
 router.route('/:courseID')
-    .get(courseController.findOne)
-    .delete(courseController.delete)
-    .put(courseController.update);
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, courseController.findOne)
+    .delete(authController.verifyToken, authController.isAdmin, courseController.delete)
+    .put(authController.verifyToken, authController.isAdmin, courseController.update);
 
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'COURSES: what???' });

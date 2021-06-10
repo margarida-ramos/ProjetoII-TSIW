@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const roleController = require('../controllers/roles.controller.js');
+const authController = require("../controllers/auth.controller");
 
 // middleware for all routes related with roles
 router.use((req, res, next) => {
@@ -13,16 +14,16 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(roleController.findAll)
-    .post(roleController.create);
+    .get(authController.verifyToken, authController.isAdmin, roleController.findAll)
+    .post(authController.verifyToken, authController.isAdmin, roleController.create);
 
 router.route('/:roleID')
-    .get(roleController.findOne)
-    .delete(roleController.delete)
-    .put(roleController.update);
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, roleController.findOne)
+    .delete(authController.verifyToken, authController.isAdmin, roleController.delete)
+    .put(authController.verifyToken, authController.isAdmin, roleController.update);
 
 router.all('*', function (req, res) {
-    res.status(404).json({ message: 'ROLES: what???' });
+    res.status(404).json({ message: 'ROLES: Not Found.' });
 })
 
 // EXPORT ROUTES (required by APP)

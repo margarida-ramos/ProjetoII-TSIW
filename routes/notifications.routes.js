@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const notificationController = require('../controllers/notifications.controller.js');
+const authController = require("../controllers/auth.controller");
 
 // middleware for all routes related with notifications
 router.use((req, res, next) => {
@@ -12,17 +13,17 @@ router.use((req, res, next) => {
     next()
 })
 
-router.route('/')
-    .get(notificationController.findAll)
-    .post(notificationController.create);
+router.route('/:badgeID/user/:userID')
+    .post(badgeController.assignBadge)
+    .delete(badgeController.unassignBadge);
 
 router.route('/:notificationID')
-    .get(notificationController.findOne)
-    .delete(notificationController.delete)
-    .put(notificationController.update);
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, notificationController.findOne)
+    .delete(authController.verifyToken, authController.isAdminOrLoggedUser, notificationController.delete)
+    .put(authController.verifyToken, authController.isAdminOrLoggedUser, notificationController.read);
 
 router.all('*', function (req, res) {
-    res.status(404).json({ message: 'NOTIFICATIONS: what???' });
+    res.status(404).json({ message: 'NOTIFICATIONS: Not Found.' });
 })
 
 // EXPORT ROUTES (required by APP)

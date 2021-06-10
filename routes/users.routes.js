@@ -29,7 +29,7 @@ router.route('/:username')
 
 //send a predefined error message for invalid routes on USERS
 router.all('*', function (req, res) {
-    res.status(404).json({ message: 'USERS: what???' });
+    res.status(404).json({ message: 'USERS: Not Found.' });
 })
 
 // EXPORT ROUTES (required by APP)

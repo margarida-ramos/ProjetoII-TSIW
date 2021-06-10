@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const activitytypeController = require('../controllers/activitytypes.controller.js');
+const authController = require("../controllers/auth.controller");
 
 // middleware for all routes related with activitytypes
 router.use((req, res, next) => {
@@ -13,13 +14,13 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(activitytypeController.findAll)
-    .post(activitytypeController.create);
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, activitytypeController.findAll)
+    .post(authController.verifyToken, authController.isAdmin, activitytypeController.create);
 
 router.route('/:activitytypeID')
-    .get(activitytypeController.findOne)
-    .delete(activitytypeController.delete)
-    .put(activitytypeController.update);
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, activitytypeController.findOne)
+    .delete(aauthController.verifyToken, authController.isAdmin, ctivitytypeController.delete)
+    .put(authController.verifyToken, authController.isAdmin, activitytypeController.update);
 
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'ACTIVITYTYPES: what???' });

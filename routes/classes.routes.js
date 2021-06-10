@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const classController = require('../controllers/classes.controller.js');
+const authController = require("../controllers/auth.controller");
 
 // middleware for all routes related with classes
 router.use((req, res, next) => {
@@ -13,13 +14,13 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(classController.findAll)
-    .post(classController.create);
+    .get(authController.verifyToken, authController.isAdmin, classController.findAll)
+    .post(authController.verifyToken, authController.isAdmin, classController.create);
 
 router.route('/:classID')
-    .get(classController.findOne)
-    .delete(classController.delete)
-    .put(classController.update);
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, classController.findOne)
+    .delete(authController.verifyToken, authController.isAdmin, classController.delete)
+    .put(authController.verifyToken, authController.isAdmin, classController.update);
 
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'CLASSES: what???' });

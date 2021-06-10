@@ -85,16 +85,14 @@ exports.assignBadge = (req, res) => {
                                         });
                                     else {
                                         user.points += badge.points;
+                                        user.coins += badge.coins;
                                         user.save().then(() => {
                                             res.status(200).json({
-                                                message: `Added Badge ${req.params.badgeID} to User ${req.params.userID}. (+${badge.points} points)`
+                                                message: `Added Badge ${req.params.badgeID} to User ${req.params.userID}. (+${badge.points} points, +${badge.coins} coins)`
                                             }).then(() => {
 
                                             })
                                         })
-
-
-
                                     }
                                 })
                         }

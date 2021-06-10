@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const activityController = require('../controllers/activities.controller.js');
+const authController = require("../controllers/auth.controller");
 
 // middleware for all routes related with activities
 router.use((req, res, next) => {
@@ -13,13 +14,16 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(activityController.findAll)
-    .post(activityController.create);
+    .get(authController.verifyToken, authController.isAdmin, activityController.findAll)
+    .post(authController.verifyToken, authController.isAdmin, activityController.create);
+
+router.route('/user')
+    .get(authController.verifyToken, authController.isAdmin, activityController.findByUser)
 
 router.route('/:activityID')
-    .get(activityController.findOne)
-    .delete(activityController.delete)
-    .put(activityController.update);
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, activityController.findOne)
+    .delete(authController.verifyToken, authController.isAdmin, activityController.delete)
+    .put(authController.verifyToken, authController.isAdmin, activityController.update);
 
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'ACTIVITIES: what???' });

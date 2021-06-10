@@ -31,7 +31,7 @@ db.user = require("./users.model.js")(sequelize, DataTypes);
 db.course = require("./courses.model.js")(sequelize, DataTypes);
 db.role = require("./roles.model.js")(sequelize, DataTypes);
 db.class = require("./classes.model.js")(sequelize, DataTypes);
-db.history = require("./histories.model.js")(sequelize, DataTypes);
+db.log = require("./logs.model.js")(sequelize, DataTypes);
 db.badge = require("./badges.model.js")(sequelize, DataTypes);
 db.notification = require("./notifications.model.js")(sequelize, DataTypes);
 db.submission = require("./submissions.model.js")(sequelize, DataTypes);
@@ -57,10 +57,10 @@ db.activity.belongsTo(db.course);
 db.class.hasMany(db.activity);
 db.activity.belongsTo(db.class);
 
-db.user.hasMany(db.history, {foreignKey: 'Username'});
+db.user.hasMany(db.log, {foreignKey: 'Username'});
 
-db.history.belongsTo(db.activity);
-db.activity.hasMany(db.history);
+db.log.belongsTo(db.activity);
+db.activity.hasMany(db.log);
 
 db.user.hasMany(db.notification, {foreignKey: 'Username'});
 
@@ -75,6 +75,7 @@ db.user.hasMany(db.submission, {foreignKey: 'Username'});
 db.course.hasMany(db.user);
 
 db.role.hasMany(db.user);
+db.user.belongsTo(db.role);
 
 db.theme.hasOne(db.user, {foreignKey: 'SelectedTheme', constraints: false}); // constraints false para evitar colisão com a relação userthemes
 

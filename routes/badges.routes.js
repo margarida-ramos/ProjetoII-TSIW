@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const badgeController = require('../controllers/badges.controller.js');
+const authController = require("../controllers/auth.controller");
 const { route } = require('./activities.routes.js');
 
 // middleware for all routes related with badges
@@ -14,17 +15,17 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(badgeController.findAll)
-    .post(badgeController.create);
+    .get(authController.verifyToken, authController.isAdmin, badgeController.findAll)
+    .post(authController.verifyToken, authController.isAdmin, badgeController.create);
 
 router.route('/:badgeID')
-    .get(badgeController.findOne)
-    .delete(badgeController.delete)
-    .put(badgeController.update);
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, badgeController.findOne)
+    .delete(authController.verifyToken, authController.isAdmin, badgeController.delete)
+    .put(authController.verifyToken, authController.isAdmin, badgeController.update);
 
 router.route('/:badgeID/user/:userID')
-    .post(badgeController.assignBadge)
-    .delete(badgeController.unassignBadge);
+    .post(authController.verifyToken, authController.isAdminOrLoggedUser, badgeController.assignBadge)
+    .delete(authController.verifyToken, authController.isAdmin, badgeController.unassignBadge);
 
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'BADGES: what???' });

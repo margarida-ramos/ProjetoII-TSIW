@@ -1,6 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const questionController = require('../controllers/questions.controller.js');
+const authController = require("../controllers/auth.controller");
 
 // middleware for all routes related with questions
 router.use((req, res, next) => {
@@ -13,16 +14,16 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(questionController.findAll)
-    .post(questionController.create);
+    .get(authController.verifyToken, authController.isAdmin, questionController.findAll)
+    .post(authController.verifyToken, authController.isAdmin, questionController.create);
 
 router.route('/:questionID')
-    .get(questionController.findOne)
-    .delete(questionController.delete)
-    .put(questionController.update);
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, questionController.findOne)
+    .delete(authController.verifyToken, authController.isAdmin, questionController.delete)
+    .put(authController.verifyToken, authController.isAdmin, questionController.update);
 
 router.all('*', function (req, res) {
-    res.status(404).json({ message: 'QUESTIONS: what???' });
+    res.status(404).json({ message: 'QUESTIONS: Not Found.' });
 })
 
 // EXPORT ROUTES (required by APP)

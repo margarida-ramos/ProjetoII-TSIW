@@ -2,6 +2,7 @@ const express = require('express');
 let router = express.Router();
 const themeController = require('../controllers/themes.controller.js');
 const { route } = require('./activities.routes.js');
+const authController = require('../controllers/auth.controller.js');
 
 // middleware for all routes related with themes
 router.use((req, res, next) => {
@@ -14,20 +15,20 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(themeController.findAll)
-    .post(themeController.create);
+    .get(authController.verifyToken, authController.isAdmin,themeController.findAll)
+    .post(authController.verifyToken, authController.isAdmin, themeController.create);
 
 router.route('/:themeID')
-    .get(themeController.findOne)
-    .delete(themeController.delete)
-    .put(themeController.update);
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, themeController.findOne)
+    .delete(authController.verifyToken, authController.isAdmin, themeController.delete)
+    .put(authController.verifyToken, authController.isAdmin, themeController.update);
 
 router.route('/:themeID/user/:userID')
-    .post(themeController.assignTheme)
-    .delete(themeController.unassignTheme);
+    .put(authController.verifyToken, authController.isAdminOrLoggedUser, themeController.selectTheme)
+    .delete(authController.verifyToken, authController.isAdmin, themeController.unassignTheme);
 
 router.all('*', function (req, res) {
-    res.status(404).json({ message: 'THEMES: what???' });
+    res.status(404).json({ message: 'THEMES: Not Found.' });
 })
 
 // EXPORT ROUTES (required by APP)
