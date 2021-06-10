@@ -9,8 +9,10 @@ router.use((req, res, next) => {
 
 router.route('/signup')
     .post(authController.signup);
+router.route('/signup/admin')
+    .post(authController.verifyToken, authController.isAdmin, authController.signupAdmin)
 router.route('/signin')
-    .post(authController.signin)
+    .post(authController.signin);
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'AUTHENTICATION: what???' });
 })

@@ -19,7 +19,6 @@ router.route('/')
 router.route('/:logID')
     .get(authController.verifyToken, authController.isAdmin, logController.findOne)
     .delete(authController.verifyToken, authController.isAdmin, logController.delete)
-    .put(authController.verifyToken, authController.isAdmin, logController.update);
 
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'LOGS: what???' });

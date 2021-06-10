@@ -14,8 +14,8 @@ router.use((req, res, next) => {
 })
 
 router.route('/:badgeID/user/:userID')
-    .post(badgeController.assignBadge)
-    .delete(badgeController.unassignBadge);
+    .post(authController.verifyToken, authController.isAdminOrLoggedUser, notificationController.create)
+    .delete(authController.verifyToken, authController.isAdminOrLoggedUser, notificationController.delete);
 
 router.route('/:notificationID')
     .get(authController.verifyToken, authController.isAdminOrLoggedUser, notificationController.findOne)

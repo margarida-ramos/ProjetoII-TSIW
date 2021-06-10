@@ -1,19 +1,27 @@
 const db = require("../models/index.js");
 const User = db.user;
-
-const { Op } = require('sequelize');
-
+const list = require("./list");
 
 
 exports.findAll = (req, res) => {
 
-    User.findAll(res.body)
+    list.procedure(req.query)
+    let limit = list.limit;
+    let offset = list.offset;
+
+    User.findAndCountAll({ where: list.condition, limit, offset })
         .then(data => {
+
+            const response = list.getPagingData(data, offset, limit);
+            res.status(200).json(response);
+
+            /*
             if (data == '') {
                 res.status(200).json({ message: "Users is empty" });
             } else {
                 res.status(200).json(data);
             }
+            */
 
         })
         .catch(err => {
@@ -23,45 +31,6 @@ exports.findAll = (req, res) => {
             });
         });
 };
-
-/*
-exports.getAllUsers = async (req, res) => {
-    try {
-        res.status(200).json("Admin Content.");
-    }
-    catch (err) {
-        res.status(500).json({ message: err.message });
-    };
-};
-
-exports.getUser = async (req, res) => {
-    try {
-        return res.status(200).json("Admin or Logged User Content.");
-    }
-    catch (err) {
-        res.status(500).json({ message: err.message });
-    };
-};
-*/
-
-exports.create = (req, res) => {
-
-    User.create(req.body)
-        .then(data => {
-            res.status(201).json({ message: "New User created.", location: "/user/" + data.Username });
-        })
-        .catch(err => {
-            if (err.name === 'SequelizeValidationError')
-                res.status(400).json({ message: err.errors[0].message });
-            else
-                res.status(500).json({
-                    message: err.message || "Some error occurred while creating the User."
-                });
-        });
-};
-
-
-
 
 // Display list of all badges for a given user (with user info)
 exports.getBadges = (req, res) => {
@@ -87,9 +56,6 @@ exports.getBadges = (req, res) => {
             });
         });
 };
-
-
-
 
 
 exports.findOne = (req, res) => {

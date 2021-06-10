@@ -77,31 +77,3 @@ exports.delete = (req, res) => {
             });
         });
 };
-
-exports.update = (req, res) => {
-    // obtains only a single entry from the table, using the provided primary key
-    Role.findByPk(req.params.roleID)
-        .then(data => {
-            if (data === null)
-                res.status(404).json({
-                    message: `Not found Role with id ${req.params.roleID}.`
-                });
-            else
-                if (!req.body.Description) {
-                    res.status(400).json({
-                        message: `Error - Data fields are null!`
-                    });
-                }
-
-            data.Description = req.body.Description;
-            data.save();
-            res.status(200).json({
-                message: `Updated Role with id ${req.params.roleID}.`
-            });
-        })
-        .catch(err => {
-            res.status(500).json({
-                message: `${err.message} Error retrieving Role with id ${req.params.roleID}.`
-            });
-        });
-};

@@ -1,6 +1,7 @@
 require('dotenv').config();         // read environment variables from .env file
 const express = require('express');
 const cors = require('cors');       // middleware to enable CORS (Cross-Origin Resource Sharing)
+const helmet = require('helmet');
 
 const app = express();
 const port = process.env.PORT || 8080;	 	// if not defined, use port 8080
@@ -8,6 +9,7 @@ const host = process.env.HOST || '127.0.0.1'; 	// if not defined, localhost
 
 
 app.use(express.json());
+app.use(helmet());
 
 // root route -- /api/
 app.get('/', function (req, res) {

@@ -19,8 +19,7 @@ router.route('/')
 
 router.route('/:roleID')
     .get(authController.verifyToken, authController.isAdminOrLoggedUser, roleController.findOne)
-    .delete(authController.verifyToken, authController.isAdmin, roleController.delete)
-    .put(authController.verifyToken, authController.isAdmin, roleController.update);
+    .delete(authController.verifyToken, authController.isAdmin, roleController.delete);
 
 router.all('*', function (req, res) {
     res.status(404).json({ message: 'ROLES: Not Found.' });

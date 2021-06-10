@@ -1,7 +1,7 @@
 const express = require('express');
 let router = express.Router();
 const activitytypeController = require('../controllers/activitytypes.controller.js');
-const authController = require("../controllers/auth.controller");
+const authController = require("../controllers/auth.controller.js");
 
 // middleware for all routes related with activitytypes
 router.use((req, res, next) => {
@@ -19,7 +19,7 @@ router.route('/')
 
 router.route('/:activitytypeID')
     .get(authController.verifyToken, authController.isAdminOrLoggedUser, activitytypeController.findOne)
-    .delete(aauthController.verifyToken, authController.isAdmin, ctivitytypeController.delete)
+    .delete(authController.verifyToken, authController.isAdmin, activitytypeController.delete)
     .put(authController.verifyToken, authController.isAdmin, activitytypeController.update);
 
 router.all('*', function (req, res) {

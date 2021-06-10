@@ -43,24 +43,30 @@ db.activitytype = require("./activitytypes.model.js")(sequelize, DataTypes);
 db.badge.belongsToMany(db.user, { through: 'userbadges' });
 db.user.belongsToMany(db.badge, { through: 'userbadges', foreignKey: 'Username'  });
 
-//define the User-Badge m:n relationship
+//define the User-Theme m:n relationship
 db.theme.belongsToMany(db.user, { through: 'userthemes'});
 db.user.belongsToMany(db.theme, { through: 'userthemes', foreignKey: 'Username' });
+
+//define the User-Class m:n relationship
+db.class.belongsToMany(db.user, { through: 'userclasses'});
+db.user.belongsToMany(db.class, { through: 'userclasses', foreignKey: 'Username' });
+
+//define the Class-Course m:n relationship
+db.class.belongsToMany(db.course, { through: 'classcourses'});
+db.course.belongsToMany(db.class, { through: 'classcourses'});
 
 db.activitytype.hasMany(db.activity);
 db.activity.belongsTo(db.activitytype);
 
 //define 1:N relationships
-db.course.hasMany(db.activity);
-db.activity.belongsTo(db.course);
+db.course.hasMany(db.activity, {constraints: false});
+db.activity.belongsTo(db.course, {constraints: false});
 
-db.class.hasMany(db.activity);
-db.activity.belongsTo(db.class);
+db.class.hasMany(db.activity, {constraints: false});
+db.activity.belongsTo(db.class, {constraints: false});
 
-db.user.hasMany(db.log, {foreignKey: 'Username'});
-
-db.log.belongsTo(db.activity);
-db.activity.hasMany(db.log);
+db.user.hasMany(db.log, {foreignKey: 'Username'}, {constraints: false});
+db.activity.hasMany(db.log, {constraints: false});
 
 db.user.hasMany(db.notification, {foreignKey: 'Username'});
 
@@ -72,15 +78,16 @@ db.question.belongsTo(db.submission);
 
 db.user.hasMany(db.submission, {foreignKey: 'Username'});
 
-db.course.hasMany(db.user);
+db.course.hasMany(db.user, {constraints: false});
 
 db.role.hasMany(db.user);
 db.user.belongsTo(db.role);
 
 db.theme.hasOne(db.user, {foreignKey: 'SelectedTheme', constraints: false}); // constraints false para evitar colisão com a relação userthemes
 
+/*
 
-db.sequelize.sync({ force: true })
+db.sequelize.sync({ force: false })
 .then(() => {
     console.log('DB is successfully synchronized')
 })
@@ -88,5 +95,6 @@ db.sequelize.sync({ force: true })
     console.log(e)
 }); 
 
+*/
 
 module.exports = db;

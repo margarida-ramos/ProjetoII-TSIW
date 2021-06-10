@@ -20,7 +20,6 @@ router.use((req, res, next) => {
 
 router.route('/')
     .get(authController.verifyToken, authController.isAdmin, userController.findAll)
-    .post(userController.create)
 
 router.route('/:username')
     .get(authController.verifyToken, authController.isAdminOrLoggedUser, userController.findOne)

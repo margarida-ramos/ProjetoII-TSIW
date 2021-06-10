@@ -2,7 +2,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const config = require("../config/auth.config.js");
 const db = require("../models");
+const { role } = require("../models");
+const { Op } = require("sequelize");
 const User = db.user;
+const Role = db.role;
 
 exports.signup = async (req, res) => {
     try {
@@ -13,26 +16,58 @@ exports.signup = async (req, res) => {
         if (user)
             return res.status(400).json({ message: "Failed! Username is already in use!" });
         // save User to database
-   
+
+        let role = await Role.findOne({
+            where: {
+                name: {
+                    [Op.eq]: "user"
+                }
+            }
+        });
+
         user = await User.create({
             Username: req.body.Username,
             Password: bcrypt.hashSync(req.body.Password, 8),
-            roleId: req.body.roleId,
             courseId: req.body.courseId
         });
-    
 
-        if (req.body.role) {
-            let role = await Role.findOne({ where: { name: req.body.role } });
-            if (role)
-                await user.setRole(role);
-        }
-        else
-            await user.setRole(1); // user role = 1 (regular use; not ADMIN)
+        await user.setRole(role.id); 
         return res.json({ message: "User was registered successfully!" });
     }
     catch (err) {
-        res.status(500).json({ message: err.message }); 
+        res.status(500).json({ message: err.message });
+    };
+};
+
+exports.signupAdmin = async (req, res) => {
+    try {
+        // check duplicate Username
+        let user = await User.findOne(
+            { where: { Username: req.body.Username } }
+        );
+        if (user)
+            return res.status(400).json({ message: "Failed! Username is already in use!" });
+        // save User to database
+
+        let role = await Role.findOne({
+            where: {
+                name: {
+                    [Op.eq]: "admin"
+                }
+            }
+        });
+
+        user = await User.create({
+            Username: req.body.Username,
+            Password: bcrypt.hashSync(req.body.Password, 8),
+            courseId: req.body.courseId
+        });
+
+        await user.setRole(role.id); // user role = 1 (regular use; not ADMIN)
+        return res.json({ message: "User was registered successfully!" });
+    }
+    catch (err) {
+        res.status(500).json({ message: err.message });
     };
 };
 
@@ -48,28 +83,36 @@ exports.verifyToken = (req, res, next) => {
         if (err) {
             return res.status(401).send({ message: "Unauthorized!" });
         }
-        req.loggedUserId = decoded.id; // save user ID for future verifications
+        req.loggedUsername = decoded.id; // save user ID for future verifications
         next();
     });
 };
 
 exports.isAdmin = async (req, res, next) => {
-    let user = await User.findByPk(req.loggedUserId);
+
+    if (!req.body.loggedUsername) {
+        res.status(403).send({
+            message: "Require loggedUsername in body!"
+        });
+    }
+
+    let user = await User.findByPk(req.body.loggedUsername);
     let role = await user.getRole();
+
     if (role.name === "admin")
         next();
-    return res.status(403).send({
+    else return res.status(403).send({
         message: "Require Admin Role!"
     });
 };
 
 exports.isAdminOrLoggedUser = async (req, res, next) => {
-    let user = await User.findByPk(req.loggedUserId);
+    let user = await User.findByPk(req.body.loggedUsername);
     let role = await user.getRole();
-    if (role.name === "admin" || user.id == req.params.userID)
+    if (role.name === "admin" || user.username == req.body.loggedUsername)
         next();
-    return res.status(403).send({
-        message: "Require Admin Role!"
+    else return res.status(403).send({
+        message: "Require Admin Role or Login!"
     });
 };
 
@@ -95,7 +138,7 @@ exports.signin = async (req, res) => {
             //id: user.id, 
             Username: user.Username,
             //email: user.email,
-             role: role.Description.toUpperCase(), accessToken: token
+            role: role.name.toUpperCase(), accessToken: token
         });
     } catch (err) { res.status(500).json({ message: err.message }); };
 };

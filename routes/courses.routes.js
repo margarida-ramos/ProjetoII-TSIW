@@ -14,7 +14,7 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-    .get(authController.verifyToken, authController.isAdmin, courseController.findAll)
+    .get(authController.verifyToken, authController.isAdminOrLoggedUser, courseController.findAll)
     .post(authController.verifyToken, authController.isAdmin, courseController.create);
 
 router.route('/:courseID')

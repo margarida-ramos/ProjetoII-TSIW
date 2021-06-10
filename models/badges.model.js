@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: 0
         }
     }, {
-        timestamps: true
+        timestamps: false
     });
     return Badge;
 };
