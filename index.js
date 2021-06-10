@@ -4,8 +4,8 @@ const cors = require('cors');       // middleware to enable CORS (Cross-Origin R
 const helmet = require('helmet');
 
 const app = express();
-const port = process.env.PORT || 8080;	 	// if not defined, use port 8080
-const host = process.env.HOST || '127.0.0.1'; 	// if not defined, localhost
+const port = process.env.PORT || 5000;	 	// if not defined, use port 5000
+const host = process.env.HOST || '0.0.0.0'; 	// if not defined, localhost
 
 
 app.use(express.json());
